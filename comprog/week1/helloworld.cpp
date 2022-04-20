@@ -11,5 +11,22 @@ typedef long long ll;
     (cerr << #x << ": " << (x) << endl)
 
 int main() {
+    
+    string word_n_names;
+    int n_names;
+    getline(cin, word_n_names);
+    n_names = stoi(word_n_names);
+    // cout << n_names + "\n";
+    vector<string> names = {};
+    for (int i = 0; i < n_names; i++){
+        string name;
+        getline(cin, name);
+        names.push_back(name);
+    }
+
+    for (int i = 0; i < n_names; i++){
+        cout << "Hello " + names[i] + "!\n";
+    }
+
     return 0;
 }

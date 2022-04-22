@@ -19,6 +19,8 @@ using std::cin;
 
 int main()
 {
+    std::vector<std::string> custom_names = {"Foo", "Fighters", "Monkey", "Wrench"};
+    for (int i; )
     std::vector<std::string> names = {};
     std::string txt = "";
     for (int i=0; i < names.size(); i++)

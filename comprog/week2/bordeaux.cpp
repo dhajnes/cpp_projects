@@ -10,22 +10,21 @@ typedef long long ll;
 #define debug(x) \
     (cerr << #x << ": " << (x) << endl)
 
-bool customsort(const pair<int,int> &a, const pair<int,int> &b){
+bool customsort(const pair<ll,ll> &a, const pair<ll,ll> &b){
         if (a.first != b.first){
             return(a.first < b.first);
         }
         else{
-            return(b.second < a.second);
+            return(a.second > b.second);
         }
-        
 }
 
 int main() {
     int n;
     cin >> n;
-    vector< pair<int, int> > offers;
+    vector< pair<ll, ll> > offers;
     offers.reserve(n);
-    int d_i; int v_i;
+    ll d_i; ll v_i;
 
     for (int i=0; i < n; i++){
         cin >> d_i;
@@ -41,12 +40,12 @@ int main() {
 
     sort(offers.begin(), offers.end(), customsort);
 
-    cout << "Sorted pairs: \n";
-    for (uint i=0; i < offers.size(); i++){
-        cout << offers[i].first << " " << offers[i].second << "\n";
-    }
-    int borrowed = offers[0].first;
-    int brutto = offers[0].second;
+    // cout << "Sorted pairs: \n";
+    // for (uint i=0; i < offers.size(); i++){
+    //     cout << offers[i].first << " " << offers[i].second << "\n";
+    // }
+    ll borrowed = offers[0].first;
+    ll brutto = offers[0].second;
 
     for (uint i=1; i < offers.size(); i++){
         if (brutto < offers[i].first){
@@ -60,35 +59,5 @@ int main() {
     }
     cout << borrowed << " " << brutto - borrowed;
 
-    // cout << "Set: \n";
-    // for (auto it = offers_set.begin(); it !=offers_set.end(); ++it){
-    //     cout << it->first << " " << it->second << "\n";
-    // }
-    
-
-    // set <pair<int, int>> offers_set(offers.begin(), offers.end());  // loaded vector sort into a set of pairs
-
-
-    // auto end = offers_set.end()--;
-    // // cout << "end of offers set: " << it->first << " " << it->second;
-    // int n_borrowed = 1;
-
-    // while (n_borrowed <= end->first)
-    // {
-    //     cout << "Number of borrowed wines: " << n_borrowed << "\n";
-    //     auto temp_offers_set = offers_set;
-    //     int current_d_i = n_borrowed;
-    //     int netto_bottles = current_d_i - n_borrowed;
-
-    //     for (auto it = temp_offers_set.begin(); it !=temp_offers_set.end(); ++it){
-    //         if(it->first > current_d_i){
-    //             break;
-    //         }
-            
-
-    //     }
-
-    //     n_borrowed++;
-    // }
     return 0;
 }

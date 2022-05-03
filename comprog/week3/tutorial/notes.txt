@@ -1,0 +1,14 @@
+tie(i, p) = t
+// https://en.cppreference.com/w/cpp/utility/tuple/tie
+
+
+
+
+NOTE: use more functions - learn all the passes by value/reference and so on by heart
+
+Cheat sheet:
+<-- query template (a lot of while statements?)
+<-- priority_queue< foo<bar,bar>, vector<foo,bar>, greater<pair<int,int>>> name_of_the_queue;
+generally priority_queue returns normally the largest element, by putting in the greater it returns the smallest element
+
+

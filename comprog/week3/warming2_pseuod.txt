@@ -1,0 +1,20 @@
+let A       be vector of int
+let f_vals  be a vector of functional values for the maximal length
+let g_vals  be a vector of smallest element to describe a subset of length given by its index
+    
+
+f_i(i) = 1 + max{l|g_i[l] < A[i]}
+g_next(i) = min{g[f[i]], A[i]}
+
+
+for i in A.size
+    g_idx = find idx of a g_vals[l] from g_vals s.t. g_vals[l] < A[i]
+        --> proably some lowerbound or something
+    f_vals[i] = 1 + max(g_vals[g_idx], A[i])
+    if (f_vals[i] > g_vals.size-1){
+        g_vals.push_back(A[i])
+    }
+    else{
+        g_vals[f_vals[i]] = min(g_vals[f_vals[i]], A[i])
+    }
+    

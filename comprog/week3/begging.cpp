@@ -1,0 +1,120 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+typedef long long ll;
+
+#define debug(x) \
+    (cerr << #x << ": " << (x) << endl)
+
+void print_array(int *pre, int length){
+    cout << "Printing array:\n";
+    for (int i=0; i<length; i++){
+        cout << pre[i] << ", ";
+    }
+    cout << "\n";
+}
+
+void print_vector(vector<int> vec){
+    cout << "Printing vector:" <<"\n";
+    for (uint i=0; i<vec.size(); i++){
+        cout << vec[i] << ", ";
+    }
+    cout << "\n";
+}
+
+
+
+class dpClass {       // The class
+  public:             // Access specifier
+    int val{0};        // Attribute (int variable)
+    // vector<int> ids{};  // Attribute (string variable)
+    int prev;
+};
+
+int main() {
+    bool vb = false;
+    int n; int m; vector<int> A; 
+    cin >> n >> m;
+    vector<dpClass> dp(n, dpClass{});
+
+    // vector<int> v = {1,4,5};
+
+    // vector<int, vector<int>>
+    A.reserve(n);
+    
+
+    for (int i=0; i < n; i++){
+        int a;
+        cin >> a;
+        // A is a vector filled with wine offers
+        A.push_back(a);
+    }
+    int best_id = 0;
+    for (int i=0; i < n; i++){
+        if (i < m){
+            dp[i].val = A[i];
+            dp[i].prev = -1;
+        }
+        else{
+            int _max_id = -1;
+            int _max_val = -1;
+            for (int j = i-m; j > i-2*m; j--){
+                if (j<0) break;
+                if(_max_val == -1){
+                    _max_val = dp[j].val;
+                    _max_id = j;
+                }
+                else{
+                    if (dp[j].val > _max_val){
+                        _max_id = j;
+                        _max_val = dp[j].val;
+                    }
+                }
+            }
+
+            
+            dp[i].val = A[i] + dp[_max_id].val;
+            
+            dp[i].prev = _max_id;
+            
+        }
+        if (dp[i].val > dp[best_id].val) best_id = i; 
+    }
+    if (vb) {
+        print_vector(A);
+        cout << "\ndp:\n";
+        for(uint i=0; i < dp.size(); i++){
+            cout << dp[i].val << ", ";
+        }
+        cout << "\n";
+        // cout << "\ndp:\n";
+        // print_vector(dp);
+        cout << "\n\n";
+    }
+    
+    vector<int> indices;
+    int curr_idx = best_id;
+    // indices.push_back(best_id);
+    while(1){
+        if (curr_idx == -1) {
+            break;
+        }
+        
+        indices.push_back(curr_idx);
+        curr_idx = dp[curr_idx].prev;
+        
+        
+    }
+    // print_vector(indices);
+    reverse(indices.begin(), indices.end());
+    cout << dp[best_id].val << " " << indices.size() << "\n";
+    for (uint i=0; i < indices.size(); i++){
+        cout << indices[i]+1;
+        if (i < indices.size()-1) cout << " ";
+    }
+    cout << "\n";
+
+    
+    return 0;
+}

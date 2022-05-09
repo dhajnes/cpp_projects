@@ -7,7 +7,7 @@ typedef long long ll;
 #define debug(x) \
     (cerr << #x << ": " << (x) << endl)
 
-int whole_num(int *i, string inp){
+ll whole_num(ll *i, const string& inp){
     char num_chars[4];
     int cnt = 0;
     while (true){
@@ -21,46 +21,59 @@ int whole_num(int *i, string inp){
     return stoi(num_chars);
 }
 
-ll deeper(bool isSum, int *i, string inp){
-    vector<ll> vals;
-    ll out;
+class Node {
+    public:
+        vector<ll> vals;
+        vector<Node *> children;
+        vector<Node *> parents;
+        bool isFirst = false;
+        bool isSum;
 
-    while(true){
-        if (inp[*i] == ')' || *i >= (int) inp.size()){
-            break;
+        ll output(){
+            if (isSum){
+                return accumulate(vals.begin(), vals.end(), 0);
+            }
+            else{
+                return accumulate(vals.begin(), vals.end(), 1, multiplies<ll>());
+            }
         }
-        if ( isdigit(inp[*i]) )
-        {   
-            vals.push_back(whole_num(i, inp));
-            if (inp[*i] == ')') break;
+};
+
+ll deeper(Node *node, ll *i, const string &inp){
+    // ll out;
+    while((*i) < (ll) inp.size()){
+        if (inp[*i] == ')') break;
+        if (inp[*i] == '(' || inp[*i] == ','){
+            (*i)++;
+            continue;
+        }
+        
+        if (isdigit(inp[*i])){
+            node->vals.push_back(whole_num(i, inp));
+        }
+        else if (inp[*i] == '+')
+        {
+            Node new_node;
+            new_node.parents.push_back(node);
+            new_node.isSum = true;
+            node->children.push_back(&new_node);
+            node->vals.push_back(deeper( &new_node, i, inp));
+
         }
         else if (inp[*i] == '*')
         {
-            (*i)++;
-            vals.push_back(deeper(false, i, inp));
+            Node new_node;
+            new_node.parents.push_back(node);
+            new_node.isSum = false;
+            node->children.push_back(&new_node);
+            node->vals.push_back(deeper( &new_node, i, inp));
         }
-        else if (inp[*i] == '+')
-        {   
-            (*i)++;
-            vals.push_back(deeper(true, i, inp));
-        }
-        (*i)++;
     }
-
-    if (isSum){
-        out = accumulate(vals.begin(), vals.end(), 0);
-    }
-    else{
-
-        out = accumulate(vals.begin(), vals.end(), 1, multiplies<ll>());
-    }
-
-    return out;
-      
+    return node->output();
 }
 
 int main() {
-
+    bool vb = true;
     vector<string> trees;
     string line;
     while(getline(cin, line)){
@@ -68,36 +81,43 @@ int main() {
     }
 
     char c;
-    ll total_sum = 0;
-    for (uint i = 0; i < trees.size(); i++){
+    
+    ll total = 0;
 
-        for (int j = 0; j < (int) trees[i].size(); j++){
+    // cycle through trees
+    for (uint i = 0; i < trees.size(); i++){
+        cout << "current tree: " << trees[i] << "\n";
+        Node root;
+        root.isFirst = true;
+        auto curr_node = root;
+        // cycle through chars of string
+        for (ll j = 0; j < (ll) trees[i].size(); j++){
             
             c = trees[i][j];
-
-            if (c == '+') 
+            if (c == '+')
             {
-                total_sum += deeper(true, &(++j), trees[i]);;
+                cout<< "WAS ++\n";
+                curr_node.isSum = true;
+                
             }
             else if (c == '*')
             {
-                total_sum += deeper(false, &(++j), trees[i]);;
+                cout<< "WAS **\n";
+                curr_node.isSum = false;
             }
-        }   
+            curr_node.vals.push_back(deeper(&curr_node, &j, trees[i]));
+
+        }
+        total += curr_node.output();
     }
-    cout << total_sum << "\n";
+    cout << total << "\n";
 
-    
-
-    // if(vb){
-    //     cout << "trees:\n";
-    //     for (uint i = 0; i < trees.size(); i++){  
-    //         cout << trees[i] << "\n";
-    //     }
-    // }
-    // ll miniarr[2] = {3, 4};
-    // ll arr[4] = {10, 20, 30, deeper_baby(false, 2, miniarr)};
-    // cout << deeper_baby(true, 4, arr) << "\n";
+    if(vb){
+        cout << "trees:\n";
+        for (uint i = 0; i < trees.size(); i++){  
+            cout << trees[i] << "\n";
+        }
+    }
     
     return 0;
 }

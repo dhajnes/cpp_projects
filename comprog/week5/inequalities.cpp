@@ -50,60 +50,34 @@ void parse_the_line(map<int, string> & ID_2_name, map<string, int> & name_2_ID,
             cout << "Unknown operator: " << oper << ". :(\n";
         }
 }
-bool dfs(int start, vector<bool> &visited, vector<bool> &local_visited, const vector<vector<int>> &adj){
-    visited[start] = true;
+
+bool dfs(int start, vector<bool> &visited, vector<bool> &local_visited,
+         const vector<vector<int>> &adj, deque<int> &ts){
+    
     local_visited[start] = true;
+
     for(int u: adj[start])
     {   
-        // cout << "local u: " << u << "\n";
         if(local_visited[u]){
-        // cout << "LOCAL IMPOSSIBLE\n";
         return false;
         }
         if (!visited[u]){
-            if(dfs(u, visited, local_visited, adj)) return false;
+            if(!dfs(u, visited, local_visited, adj, ts)) return false;
         }
     }
+
+    local_visited[start] = false;
+    visited[start] = true;
+    ts.push_front(start);
     return true;
 }
-
-
-// bool dfs(int start, vector<bool> &visited, const vector<vector<int>> &adj){
-//     // vector<bool> visited(n, false);
-//     stack<int> S; //LIFO
-
-//     S.push(start);
-//     visited[start] = true;
-//     map<int, bool> local_visited = {};
-//     while(!S.empty()){
-//         int v = S.top();
-//         S.pop();
-//         local_visited.clear();
-//         for (int u: adj[v])
-//         {
-//             if (!visited[u])
-//             {
-//                 S.push(u);
-//                 if(local_visited.count(u)){
-//                     // cout << "impossible\n";
-//                     return false;
-//                 }else{
-//                     local_visited[u] = true;
-//                 }
-//                 visited[u] = true;
-//             }
-//         }
-//     }
-//     return true;
-// }
 
 int main(){
     int n;
     cin >> n;
 
-    vector<vector<int>> adj(n);
-    vector<bool> visited(n, false);
-    vector<bool> local_visited(n, false);
+    vector<vector<int>> adj(n*2);
+    
     // vector<string> names(n+1, "");
     map<int, string> ID_2_name;
     map<string, int> name_2_ID;
@@ -111,6 +85,7 @@ int main(){
     string first;
     string second;
     string oper;
+    deque<int> ts;
     int ID_cnt = -1;
 
     // parse the lines
@@ -119,26 +94,57 @@ int main(){
         parse_the_line(ID_2_name, name_2_ID, ID_cnt, first, second, oper, adj);       
     }
 
-    if (!dfs(0, visited, local_visited, adj)){
-        cout << "impossible\n";
-    }else{
-        cout << "possible\n";
+    vector<bool> visited(ID_2_name.size(), false);
+    vector<bool> local_visited(ID_2_name.size(), false);
+
+    // cerr << "id2name:\n";
+    // for (uint i = 0; i < ID_2_name.size(); i++){
+    //     cerr << i << " | " << ID_2_name[i] << "\n";
+    // }
+    // cerr << "\n";
+    bool impossible = false;
+
+    for (uint start = 0; start < visited.size(); start++)
+    {
+        if (visited[start]){
+            continue;
+        }
+        if (!dfs(start, visited, local_visited, adj, ts)){
+            impossible = true;
+            break;
+        }
     }
 
-    cerr << "--------------\n| ADJ. TABLE |\n--------------\n";
-    for (uint i = 0; i < adj.size(); i++){
-        cerr << ID_2_name[i] << " | ";
-        for (uint j = 0; j < adj[i].size(); j++){
-            cerr << ID_2_name[adj[i][j]] << " ";
-            
+    if (impossible){
+        cout << "impossible\n";
+    }
+    else{
+        cout << "possible\n";
+        // cout << "ts.size: " << ts.size() << "\n";
+        for(auto iter = ts.rbegin(); iter != ts.rend(); ++iter) {
+            cout << ID_2_name[*iter] << " ";
         }
-        cerr << "\n";
+        cout << "\n";
     }
-    cerr << "\n- - - - -\n\n";
-    cerr << "-----------\n| VISITED |\n-----------\n";
-    for (uint i = 0; i < adj.size(); i++){
-        cerr << ID_2_name[i] << " | " << visited[i] << "\n";
-    }
-    cerr << "-----------\n";
+    
+
+
+    // cerr << "--------------\n| ADJ. TABLE |\n--------------\n";
+    // for (uint i = 0; i < ID_2_name.size(); i++){
+    //     cerr << ID_2_name[i] << " | ";
+    //     for (uint j = 0; j < adj[i].size(); j++){
+    //         cerr << ID_2_name[adj[i][j]] << " ";
+            
+    //     }
+    //     cerr << "\n";
+    // }
+    // cerr << "\n- - - - -\n\n";
+    // cerr << "-----------\n| VISITED |\n-----------\n";
+    // for (uint i = 0; i < ID_2_name.size(); i++){
+    //     cerr << ID_2_name[i] << " | " << visited[i] << "\n";
+    // }
+    // cerr << "-----------\n";
+    
+    
     return 0;
 }

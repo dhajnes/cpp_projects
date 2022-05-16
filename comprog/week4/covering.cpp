@@ -48,49 +48,61 @@ int main(){
         }
     }
 
-    vector<int> marks(max_num+1, -1);
+    vector<int> markers(max_num+1, -1);
     vector<ll> masks(s.size(), 0);
     uint max_arity = 0;
     uint arity_cnt = 0;
-    // ll super_mask = 0;
-    // ll sub_mask = 0;
-    ll mask = 0;
+    // ll mask = 0;
+    ll mask_len = 8 * sizeof(ll);
+    // cout<< "mask_len" << mask_len << endl;
     
     // generate masks
     for (uint i = 0; i < s.size(); i++){
+        // mask = 0;
         for (auto const &k : s[i])
         {   
-            mask = mask | 1 << (k % 64);  
+            // cout << "k: " << k << "\n";
+            masks[i] = masks[i] | 1 << (k % mask_len);  
         }
-        masks[i] = mask;
+        // cout << "mask of set " << i << ":\n";
+        // cout << bitset<64>(mask) << "\n"; 
+        //  = mask;
     }
 
-    // choose examined superset
+    // exit(0);
+
+    // choose examined candidate superset
     for (uint i = 0; i < s.size(); i++)
     {  
-
         arity_cnt = 0;
         for (auto const &k : s[i])
         {   
-            // mark itself into the marks 
-            marks[k] = i;
+            markers[k] = i; // mark itself into the marks 
         }
         
-        // cycle through subsets
+        // cycle through candidate subsets
         for (uint j = 0; j < s.size(); j++)
         {  
             if (j == i) continue;  // dont examine self
-            if ((~masks[i] & masks[j]) == 1)
+
+            if ((~masks[i] & masks[j]) != 0)
             {
                 continue;
             }
+
             else
-            {
-                uint hits_cnt = 0;
+            {   
+                
+                bool is_subset = true;
                 for (auto const &k : s[j]){
-                    if (marks[k] == (int) i) hits_cnt++;
-                }
-                if(hits_cnt == s[j].size()) arity_cnt++;
+                    if (markers[k] != (int) i)
+                    {   
+                        is_subset = false;
+                        break;
+                    }
+                }   
+                if(is_subset) arity_cnt++;
+            
             }
         }
         if (arity_cnt > max_arity) max_arity = arity_cnt;

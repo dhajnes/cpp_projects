@@ -8,7 +8,7 @@ DEBUG_FLAGS  = -g -Wall -Wextra -fsanitize=undefined,address -D_GLIBCXX_DEBUG -O
 JUDGE_FLAGS  = -Wall -O2 -static -pipe
 
 # The build target 
-TARGET = inequalities
+TARGET = fares
 
 all:
 			$(CC) $(JUDGE_FLAGS) -o $(TARGET) $(TARGET).cpp

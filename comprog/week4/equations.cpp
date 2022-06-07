@@ -245,20 +245,9 @@ int main() {
         }
         
     }
-    // if (possible_answer != -1){
-    //     cout << mid << "\n";
-    //     delete_tree(&root);
-    // }
-    // else{
-        cout << "impossible" << "\n";
-        delete_tree(&root);
-    // }
-    
-    
+    cout << "impossible" << "\n";
+    delete_tree(&root);
 
-    
-    
-    // cout << total << "\n";
     
     return 0;
 }

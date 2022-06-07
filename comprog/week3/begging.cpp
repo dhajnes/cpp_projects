@@ -28,7 +28,6 @@ void print_vector(vector<int> vec){
 class dpClass {       // The class
   public:             // Access specifier
     int val{0};        // Attribute (int variable)
-    // vector<int> ids{};  // Attribute (string variable)
     int prev;
 };
 
@@ -37,10 +36,6 @@ int main() {
     int n; int m; vector<int> A; 
     cin >> n >> m;
     vector<dpClass> dp(n, dpClass{});
-
-    // vector<int> v = {1,4,5};
-
-    // vector<int, vector<int>>
     A.reserve(n);
     
 

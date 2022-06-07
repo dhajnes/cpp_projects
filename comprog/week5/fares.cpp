@@ -34,11 +34,12 @@ int main(){
     bool vb = false;
     ll n_nodes, b_lines, m, t;
     cin >> n_nodes >> b_lines >> m >> t;
-    vector<vector<pair<ll, ll>>> adj(n_nodes);  // initialized to zeros in the first dim
+    
     vector<ll> dist(n_nodes, INF);
     
     
     // read the edges and save them into Adjacency List
+    vector<vector<pair<ll, ll>>> adj(n_nodes);  // initialized to zeros in the first dim
     for (int i = 0; i < b_lines; i++){
         ll first, second, weight;
         cin >> first >> second >> weight;

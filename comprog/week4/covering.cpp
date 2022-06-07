@@ -52,24 +52,15 @@ int main(){
     vector<ll> masks(s.size(), 0);
     uint max_arity = 0;
     uint arity_cnt = 0;
-    // ll mask = 0;
     ll mask_len = 8 * sizeof(ll);
-    // cout<< "mask_len" << mask_len << endl;
-    
+
     // generate masks
     for (uint i = 0; i < s.size(); i++){
-        // mask = 0;
         for (auto const &k : s[i])
         {   
-            // cout << "k: " << k << "\n";
             masks[i] = masks[i] | 1 << (k % mask_len);  
         }
-        // cout << "mask of set " << i << ":\n";
-        // cout << bitset<64>(mask) << "\n"; 
-        //  = mask;
     }
-
-    // exit(0);
 
     // choose examined candidate superset
     for (uint i = 0; i < s.size(); i++)
@@ -91,8 +82,7 @@ int main(){
             }
 
             else
-            {   
-                
+            {    
                 bool is_subset = true;
                 for (auto const &k : s[j]){
                     if (markers[k] != (int) i)

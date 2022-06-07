@@ -11,8 +11,7 @@ void dfs(int v, vector<bool> *visited, vector<vector<int>> *adj, int max_depth, 
         for (int u: (*adj)[v])
         {
             if (curr_depth < max_depth)
-            {   
-                
+            {     
                 dfs(u, visited, adj, max_depth, curr_depth+1);
             }
         }

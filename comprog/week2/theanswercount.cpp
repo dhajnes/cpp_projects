@@ -44,12 +44,9 @@ int main() {
         }
     }
 
-    uint pow_set_size = pow(2, A1.size());
     // generate all subsets 
+    uint pow_set_size = pow(2, A1.size());
     for (uint cnt = 0; cnt < pow_set_size; cnt++){
-        if (cnt % 1000 == 0){
-            // cout << "1st, cnt: " << cnt << "\n";
-        }
         
         ll temp_sum = 0;
         for (uint i=0; i < A1.size(); i++){
@@ -83,7 +80,6 @@ int main() {
         auto lb = lower_bound(S2.begin(), S2.end(), (x - candidate));
         auto ub = upper_bound(S2.begin(), S2.end(), (x - candidate));
         total_count += ub-lb;
-
     }
     cout << total_count;
 

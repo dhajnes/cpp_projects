@@ -40,10 +40,6 @@ int main() {
 
     sort(offers.begin(), offers.end(), customsort);
 
-    // cout << "Sorted pairs: \n";
-    // for (uint i=0; i < offers.size(); i++){
-    //     cout << offers[i].first << " " << offers[i].second << "\n";
-    // }
     ll borrowed = offers[0].first;
     ll brutto = offers[0].second;
 

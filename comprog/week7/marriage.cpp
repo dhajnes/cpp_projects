@@ -1,0 +1,167 @@
+#include <bits/stdc++.h>
+typedef long long ll;
+using namespace std;
+map <int, string> id2name;
+map <string, int> name2id;
+map <int, pair<string,int>> q_answers;
+
+void show_adj_table(const vector<vector<pair<int,int>>> &adj){
+    cout << "--------------\n| ADJ. TABLE |\n--------------\n";
+    for (uint i = 0; i < adj.size(); i++){
+        cout << i+1 << " | ";
+        for (uint j = 0; j < adj[i].size(); j++){
+            cout << "(" << adj[i][j].first+1 << ", " << adj[i][j].second << " ) ";
+        }
+        cout << "\n";
+    }
+}
+
+void print(const vector<bool> &vec, const string &txt){
+    cout << "vec: " << txt << "\n";
+    for (uint i = 0; i < vec.size(); i++){
+        cout << i+1 << " | " << vec[i] << "\n";
+    }
+    cout << "\n";
+}
+
+void print(const vector<int> &vec, const string &txt){
+    cout << "vec: " << txt << "\n";
+    for (uint i = 0; i < vec.size(); i++){
+        cout << i+1 << " | " << vec[i] << "\n";
+    }
+    cout << "\n";
+}
+
+void print(const vector<ll> &vec, const string &txt){
+    cout << "vec: " << txt << "\n";
+    for (uint i = 0; i < vec.size(); i++){
+        cout << i+1 << " | " << vec[i] << "\n";
+    }
+    cout << "\n";
+}
+
+#define debug(x) \
+    (cerr << #x << ": " << (x) << endl)
+
+class UnionFind{
+    private:
+        vector<int> parent;
+    public:
+        UnionFind(int N) {
+            parent.resize(N);
+            for (int i = 0; i < N; i++) parent[i] = i;
+        }
+        int findSet(int i){
+            // print(parent, "parent:");
+            if (parent[i] == i) return i;
+            else return findSet(parent[i]);
+        }
+        bool isSameSet(int i, int j){
+            return findSet(i) == findSet(j);
+        }
+        void unionSet(int i, int j){
+            i = findSet(i), j = findSet(j);
+            if (!isSameSet(i, j)){  // or (i != j)
+                parent[i] = j;
+            }
+
+        }
+};
+
+
+
+void lca(int u, const vector<vector<int>> &adj, vector<int> &ancestor, UnionFind &UF, vector<bool> &visited,  vector<vector<pair<int, int>>> &queries, vector<int> &depth_field){  // lowest common ancestor
+    for (auto v: adj[u])
+    {
+        depth_field[v] = depth_field[u] + 1;
+        lca(v, adj, ancestor, UF, visited, queries, depth_field);
+        UF.unionSet(u,v);
+        ancestor[UF.findSet(u)] = u;
+    }
+    visited[u] = true;
+
+    for (auto quer : queries[u]){
+            int v = quer.first;
+            int order = quer.second;
+            // cout << "v: " << v << "order " << order << "\n";
+            if (visited[v]){
+                // cout << "LCA of " << u+1 << " and " << v+1 << " is " << ancestor[UF.findSet(v)]+1 << "\n";
+                int lca_temp = ancestor[UF.findSet(v)];
+                int dist = (depth_field[u] - depth_field[lca_temp]) + (depth_field[v] - depth_field[lca_temp]);
+                // cout << "order: " << order <<id2name[lca_temp] << " " << dist << "\n";
+                q_answers[order] = {id2name[lca_temp], dist}; 
+            }
+    }
+}
+
+int main(){
+    int n, q;
+    cin >> n >> q;
+    vector<string> names(n);
+    vector<int> ids(n);
+
+
+
+    vector<vector<int>> adj(n);
+    auto UF = UnionFind(n);
+    vector<int> ancestor(n);
+    vector<vector<pair<int, int>>> queries(n);
+    vector<bool> visited(n, false);
+    vector<int> depth_field(n,0);
+
+    // adj load
+    for (int i = 0; i < n; i++){
+        string name;
+        cin >> name;
+        names[i] = name;
+        ids[i] = i;
+        id2name[i] = name;
+        name2id[name] = i;
+    }
+
+    for (int i = 0; i < n-1; i++){
+        string name;
+        cin >> name;
+        adj[name2id[name]].push_back(i+1);
+    }
+
+    
+    for(int i = 0; i < q; i++){
+        string first, second;
+        cin >> first >> second;
+        queries[name2id[first]].push_back({name2id[second], i});
+        if (name2id[second] != name2id[first]){
+            queries[name2id[second]].push_back({name2id[first], i});
+        }
+        
+    }
+
+    
+
+    // print(queries, "queries");
+    // show_adj_table(queries);
+  
+    
+    // show_adj_table(adj);
+    lca(0, adj, ancestor, UF, visited, queries, depth_field);    
+      for (int i = 0; i < q; i++){
+        cout << q_answers[i].first << " " << q_answers[i].second << "\n";
+    }
+    // for (int u = 0; u < n; u++){
+    //     for (auto v : queries[u]){
+        
+    //     if (visited[v]){
+    //         // cout << "LCA of " << u+1 << " and " << v+1 << " is " << ancestor[UF.findSet(v)]+1 << "\n";
+    //         int lca_temp = ancestor[UF.findSet(v)];
+    //         int dist = (depth_field[u] - depth_field[lca_temp]) + (depth_field[v] - depth_field[lca_temp]);
+    //         cout << id2name[lca_temp] << " " << dist << "\n";
+    //         // q_answers[lca_temp] = 
+    //     }
+    // }
+    // }
+    // print(depth_field, "depth_field");
+    // print(visited, "visited");
+    
+
+    return 0;
+}

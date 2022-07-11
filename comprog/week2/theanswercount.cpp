@@ -83,8 +83,6 @@ int main() {
     }
     cout << total_count;
 
-
     return 0;
-
     // source: subset generation inspired by https://www.geeksforgeeks.org/find-distinct-subsets-given-set/
 }

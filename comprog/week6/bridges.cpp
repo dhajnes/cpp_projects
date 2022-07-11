@@ -55,16 +55,6 @@ int main(){
         adj[second].push_back(first);
     }
 
-    // cout << "--------------\n| ADJ. TABLE |\n--------------\n";
-    // for (uint i = 0; i < adj.size(); i++){
-    //     cout << i+1 << " | ";
-    //     for (uint j = 0; j < adj[i].size(); j++){
-    //         cout << adj[i][j]+1 << " ";
-            
-    //     }
-    //     cout << "\n";
-    // }
-
     for (int i = 0; i < n; i++)
     {
         if(dfs_num[i] == -1)
@@ -72,9 +62,6 @@ int main(){
             dfsRoot = i;
             rootChildren = 0;
             n_bridges += dfs(i, dfs_depth, dfsRoot, rootChildren, adj, dfs_min, dfs_num, dfs_parent);
-            // if (rootChildren > 1){
-            //     cout << i << 
-            // }
         }
 
     }

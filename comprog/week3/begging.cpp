@@ -25,9 +25,9 @@ void print_vector(vector<int> vec){
 
 
 
-class dpClass {       // The class
-  public:             // Access specifier
-    int val{0};        // Attribute (int variable)
+class dpClass {
+  public:
+    int val{0};
     int prev;
 };
 
@@ -68,40 +68,23 @@ int main() {
                 }
             }
 
-            
             dp[i].val = A[i] + dp[_max_id].val;
-            
             dp[i].prev = _max_id;
             
         }
         if (dp[i].val > dp[best_id].val) best_id = i; 
     }
-    if (vb) {
-        print_vector(A);
-        cout << "\ndp:\n";
-        for(uint i=0; i < dp.size(); i++){
-            cout << dp[i].val << ", ";
-        }
-        cout << "\n";
-        // cout << "\ndp:\n";
-        // print_vector(dp);
-        cout << "\n\n";
-    }
     
     vector<int> indices;
     int curr_idx = best_id;
-    // indices.push_back(best_id);
     while(1){
         if (curr_idx == -1) {
             break;
         }
-        
         indices.push_back(curr_idx);
         curr_idx = dp[curr_idx].prev;
-        
-        
     }
-    // print_vector(indices);
+
     reverse(indices.begin(), indices.end());
     cout << dp[best_id].val << " " << indices.size() << "\n";
     for (uint i=0; i < indices.size(); i++){
@@ -110,6 +93,5 @@ int main() {
     }
     cout << "\n";
 
-    
     return 0;
 }

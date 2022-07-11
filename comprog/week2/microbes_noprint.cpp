@@ -30,8 +30,7 @@ int main() {
         if (dishes[i] % 2 != 0) chunks[chunk_cnt]++;
     }
 
-    char query_letter;
-    
+    char query_letter; 
     for (int i=0; i<n_query; i++){
         cin >> query_letter;
         if (query_letter == 'Q'){
@@ -53,8 +52,6 @@ int main() {
                 }
             }
             cout << value << "\n";
-
-
         }
         else if (query_letter == 'U'){
             int idx;
@@ -75,17 +72,11 @@ int main() {
                 }
                 dishes[idx] = value;
             }
-        
         }
         else {
             cerr << "Unrecognised query letter: " << query_letter << "\n";
             return 1;
-        }
-        
+        } 
     }
-
-
-
-
     return 0;
 }

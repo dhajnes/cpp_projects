@@ -3,10 +3,7 @@
 typedef long long ll;
 using namespace std;
 
-
-// map<int, string> ID_2_name;
-//     map<string, int> name_2_ID;
-
+map<string, int> name_2_ID;
 void parse_the_line(map<int, string> & ID_2_name, map<string, int> & name_2_ID,
                     int &ID_cnt, const string &first, const string &second, const string &oper,
                     vector<vector<int>> &adj){
@@ -97,11 +94,6 @@ int main(){
     vector<bool> visited(ID_2_name.size(), false);
     vector<bool> local_visited(ID_2_name.size(), false);
 
-    // cerr << "id2name:\n";
-    // for (uint i = 0; i < ID_2_name.size(); i++){
-    //     cerr << i << " | " << ID_2_name[i] << "\n";
-    // }
-    // cerr << "\n";
     bool impossible = false;
 
     for (uint start = 0; start < visited.size(); start++)
@@ -120,31 +112,11 @@ int main(){
     }
     else{
         cout << "possible\n";
-        // cout << "ts.size: " << ts.size() << "\n";
         for(auto iter = ts.rbegin(); iter != ts.rend(); ++iter) {
             cout << ID_2_name[*iter] << " ";
         }
         cout << "\n";
     }
-    
-
-
-    // cerr << "--------------\n| ADJ. TABLE |\n--------------\n";
-    // for (uint i = 0; i < ID_2_name.size(); i++){
-    //     cerr << ID_2_name[i] << " | ";
-    //     for (uint j = 0; j < adj[i].size(); j++){
-    //         cerr << ID_2_name[adj[i][j]] << " ";
-            
-    //     }
-    //     cerr << "\n";
-    // }
-    // cerr << "\n- - - - -\n\n";
-    // cerr << "-----------\n| VISITED |\n-----------\n";
-    // for (uint i = 0; i < ID_2_name.size(); i++){
-    //     cerr << ID_2_name[i] << " | " << visited[i] << "\n";
-    // }
-    // cerr << "-----------\n";
-    
     
     return 0;
 }

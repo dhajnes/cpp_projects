@@ -62,23 +62,6 @@ int main(){
     for (int i = 0; i < n; i++){
         if(visited[i]) count++;
     }
-    
-    
-    // cerr << "--------------\n| ADJ. TABLE |\n--------------\n";
-    // for (uint i = 0; i < adj.size(); i++){
-    //     cerr << i+1 << " | ";
-    //     for (uint j = 0; j < adj[i].size(); j++){
-    //         cerr << adj[i][j]+1 << " ";
-            
-    //     }
-    //     cerr << "\n";
-    // }
-    // cerr << "\n- - - - -\n\n";
-    // cerr << "-----------\n| VISITED |\n-----------\n";
-    // for (uint i = 0; i < adj.size(); i++){
-    //     cerr << i+1 << " | " << visited[i] << "\n";
-    // }
-    // cerr << "-----------\n";
 
     cout << count << "\n";
     return 0;

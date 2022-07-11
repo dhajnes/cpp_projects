@@ -42,10 +42,6 @@ int main(){
     int local_min_id = -1;
     for (uint i=0; i<stamps.size()-1; i++){
         if (stamps[i] > stamps[i+1]){
-            // if (outlier_found == true){
-            //     cout << "impossible\n";
-            //     return 0;
-            // }
             if (outlier_found == false){
                 outlier_id = i;
                 for (uint j = outlier_id + 1; j<stamps.size(); j++){
@@ -58,14 +54,10 @@ int main(){
                 }
             }
             outlier_found = true;
-            
-            
-            
         }
     }
 
     // try to swap
-    // cout << "outlierd_id: " << outlier_id << " and local_min_id: " << local_min_id;
     swap(stamps[outlier_id], stamps[local_min_id]);
     for (uint i = 0; i < stamps.size()-1; i++){
         if (stamps[i] > stamps[i+1]){
@@ -75,6 +67,5 @@ int main(){
     }
     cout << outlier_id + 1 << " " << local_min_id + 1 << "\n";
     return 0;
-    
 
 }

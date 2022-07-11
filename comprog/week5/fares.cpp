@@ -36,8 +36,7 @@ int main(){
     cin >> n_nodes >> b_lines >> m >> t;
     
     vector<ll> dist(n_nodes, INF);
-    
-    
+
     // read the edges and save them into Adjacency List
     vector<vector<pair<ll, ll>>> adj(n_nodes);  // initialized to zeros in the first dim
     for (int i = 0; i < b_lines; i++){
@@ -49,26 +48,7 @@ int main(){
     }
     
     dijkstra(1-1, dist, adj);
-
-    if(vb)
-    {
-
-    cout << "--------------\n| ADJ. TABLE |\n--------------\n";
-    for (uint i = 0; i < adj.size(); i++){
-        cout << i+1 << " | ";
-        for (uint j = 0; j < adj[i].size(); j++){
-            cout << "("<< adj[i][j].first+1 << " [" << adj[i][j].second << "]) ";
-            
-        }
-        cout << "\n";
-    }
-    cout << "\n- - - - -\n\n";
-    cout << "-----------\n| distances |\n-----------\n";
-    for (uint i = 0; i < adj.size(); i++){
-        cout << i+1 << " | " << dist[i] << "\n";
-    }
-    cout << "-----------\n";
-    }
+    
     // cout << "n_nodes -1: " << n_nodes-1 << "\n"; 
     cout << dist[n_nodes-1] << "\n";
 

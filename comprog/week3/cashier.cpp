@@ -58,21 +58,11 @@ int main() {
         }
         dp[i] = min_coins;
     }
-
-    if(vb){
-        cout << "\ndp:\n";
-        print_vector(dp);
-    }
-
     if (dp[c] == 0){
         cout << "impossible" << "\n";
         return 0;
     }
     cout << dp[c] << "\n";
-    
-    
-    
-
-
+  
     return 0;
 }

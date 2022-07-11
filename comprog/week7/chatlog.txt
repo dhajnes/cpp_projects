@@ -1,0 +1,22 @@
+team5364
+Yasmine — Today at 10:06 AM
+2 4
+Saarlaender Saarlaenderb
+Saarlaender
+Saarlaender Saarlaender
+Saarlaender Saarlaenderb
+Saarlaenderb Saarlaender
+Saarlaenderb Saarlaenderb
+ando — Today at 10:07 AM
+0 1 1 0 vs 0 1 1 2
+Yasmine — Today at 10:14 AM
+for (int i = 0; i < n; i++) ancestor[i] = i;
+ando — Today at 10:17 AM
+Saarlaender 0
+Saarlaender 1
+Saarlaender 1
+Saarlaenderb 0
+with the 🐝
+
+
+i shall either the path compression or the unionfind by size

@@ -1,8 +1,7 @@
 #include <bits/stdc++.h>
 
 typedef long long ll;
-#define MIN_INF numeric_limits<ll>::min()
-const int UNVISITED = -1;
+
 using namespace std;
 
 void show_adj_table(const vector<vector<int>> &adj){
@@ -41,6 +40,8 @@ void print_vector_ll(const vector<ll> &vec, const string &txt){
     cout << "\n";
 }
 
+#define MIN_INF numeric_limits<ll>::min()
+
 bool compute_toposort(int start, vector<bool> &visited, vector<bool> &local_visited,
          const vector<vector<int>> &adj, vector<int> &ts){
     
@@ -66,6 +67,7 @@ bool compute_toposort(int start, vector<bool> &visited, vector<bool> &local_visi
     return true;
 }
 
+const int UNVISITED = -1;
 int dfs_counter = 0;
 stack<int> S;
 vector<int> ts;
@@ -100,16 +102,13 @@ void scc(int u, vector<int> &dfs_num, vector<int> &dfs_min, vector<bool> &on_sta
             v = S.top();
             S.pop();
             on_stack[v] = false;
-            // cout << v + 1<< " ";
             ts.push_back(v);
             component.push_front(v);
         } while (v != u);
 
         SCCs.push_front(component);
-        // cout << "\n";
     }
 }
-
 
 int main(){
     int n, m;
@@ -120,10 +119,6 @@ int main(){
     vector<bool> local_visited(n, false);
     vector<vector<int>> adj(n);
     vector<ll> gold(n);
-    
-    // ts.reserve(n);
-    // stack<int> S;
-    // int dfs_counter = 0;
 
     // for reducing the graph
     vector<int> dfs_num(n, UNVISITED);
@@ -145,21 +140,12 @@ int main(){
 
     for (int i = 0; i < n; i++)
     {   
-        // cout << "starting i: " << i << "\n";
         if (dfs_num[i] == UNVISITED)
         {   
-            // cout << "  going in i: " << i << "\n";
             scc(i, dfs_num, dfs_min, on_stack, adj);
         }
     }
 
-    // for (int i = 0; i < n; i++){
-    //     cout << i << " " << dfs_num[i] << " "  << dfs_min[i] << "\n";
-    // }
-
-    // for (uint start = 0; start < visited.size(); start++){
-    //     compute_toposort(start, visited, local_visited, adj, ts);
-    // }
     reverse(ts.begin(), ts.end());
 
     map<int,int> compressor;
@@ -180,67 +166,20 @@ int main(){
             }
         }
     }
-    
-    
-    // cout << "--------------\n| NEW ADJ. TABLE |\n--------------\n";
-    // for (uint i = 0; i < adj_new.size(); i++){
-    //     cout << i+1 << " | ";
-    //     for (auto it = adj_new[i].begin(); it != adj_new[i].end(); ++it){
-    //         cout << *it +1 << " ";
-    //     }
-    //     cout << "\n";
-    // }
 
-
-    // cout << "SCCs:\n";
-    // for (auto r : SCCs){
-    //     for( auto c : r){
-    //         cout << c+1 << " ";
-    //     }
-    //     cout << "\n";
-    // }
-    // cout << "Compressor:\n"; 
     for (auto node : compressor){
         // cout << node.first +1 << " : "  << node.second +1<< "\n";
         new_gold[node.second] += gold[node.first];
     }
 
-    // print_vector_ll(new_gold, "new_gold");
-
-
     vector<ll> max_gold_vec = new_gold;
-    // vector<bool> DAG_visited(SCCs.size(), false);
     for (uint u = 0; u < SCCs.size(); u++){
         for (auto it = adj_new[u].begin(); it != adj_new[u].end(); ++it){
-
                 ll maybe_gold = new_gold[*it];
-                // print_vector_ll(max_gold_vec, "max_gold_vec");
-                max_gold_vec[*it] = max(max_gold_vec[*it], max_gold_vec[u] + maybe_gold);
-            
+                max_gold_vec[*it] = max(max_gold_vec[*it], max_gold_vec[u] + maybe_gold);     
         }
     }
 
-    // for (auto it = adj_new[i].begin(); it != adj_new[i].end(); ++it){
-    //         cout << *it +1 << " ";
-    //     }
-
-    
-    // // print_vector_int(ts, "toposort");
-    // cout << "vec: " << "toposort" << "\n";
-    // for (uint i = 0; i < ts.size(); i++){
-    //     cout << ts[i]+1 << " ";
-    // }
-    // cout << "\n";
-    
-    // print_vector_ll(max_gold_vec, "final max_gold_vec");
-    
-    // show_adj_table(adj);
-
-    // cout << "-----------\n| VISITED |\n-----------\n";
-    // for (uint i = 0; i < n; i++){
-    //     cout << i+1 << " | " << visited[i] << "\n";
-    // }
-    // cout << "-----------\n";
     cout << *max_element(max_gold_vec.begin(), max_gold_vec.end()) << "\n"; 
     return 0;
 }

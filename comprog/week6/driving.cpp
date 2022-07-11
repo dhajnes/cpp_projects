@@ -36,9 +36,6 @@ bool first_necessary_condition(int &n, const vector<vector<int>> &adj, const vec
         
         
         if(((int) adj[i].size() == 0) && (indegree[i] == 0)){
-            // cout << "i: " << i << " | (int) adj[i].size() " << (int) adj[i].size() << " | indegree[i] : " << indegree[i] << "\n";    
-            // cout << "temp_n--\n";
-            temp_n--;
             continue;
         }
     

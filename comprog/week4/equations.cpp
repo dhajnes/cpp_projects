@@ -31,12 +31,7 @@ class Node {
 int deeper(Node *node, ll *i, const string &inp){
     
     while((*i) < (ll) inp.size()){
-        // cout << "Going deeper with i: " << *i << "\n";
-        // if(inp[*i] == '\n'){
-        //     cout << "FOUND A NEWLINE AT INDEX: " << *i << '\n';
-        // }
         if (inp[*i] == ')'){
-            // cout << "\nBREAKING\n";
             (*i)++;
             break;
         }
@@ -210,15 +205,6 @@ int main() {
         deeper(&root, &j, line);
     }   
 
-    // for (ll i = 1; i <= amax; i++){
-    //     // cout << "i: " << i << "\n";
-    //     // cout << "Tree evaluated with X = " << i << "\nOutput: " << eval_tree(&root, i) << "\n";
-    //     if (eval_tree(&root, i) == y){
-    //         cout << i << "\n";
-    //         delete_tree(&root);
-    //         return 0;
-    //     }
-    // }
     ll lb = 1;
     ll ub = amax;
 

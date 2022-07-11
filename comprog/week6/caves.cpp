@@ -1,8 +1,10 @@
 #include <bits/stdc++.h>
 
 typedef long long ll;
-#define MIN_INF numeric_limits<ll>::min()
+
 using namespace std;
+
+
 
 void show_adj_table(const vector<vector<int>> &adj){
     cout << "--------------\n| ADJ. TABLE |\n--------------\n";
@@ -40,12 +42,11 @@ void print(const vector<ll> &vec, const string &txt){
     cout << "\n";
 }
 
+#define MIN_INF numeric_limits<ll>::min()
 bool compute_toposort(int start, vector<bool> &visited, vector<bool> &local_visited,
          const vector<vector<int>> &adj, vector<int> &ts){
     
     local_visited[start] = true;
-    
-
     for(int u: adj[start])
     {   
         if(local_visited[u]){
@@ -61,7 +62,6 @@ bool compute_toposort(int start, vector<bool> &visited, vector<bool> &local_visi
         ts.push_back(start);
     }
     visited[start] = true;
-    // print_vector(visited, "visited");
     
     return true;
 }
@@ -97,27 +97,10 @@ int main(){
     for (auto u: ts){
         for (auto node: adj[u]){
             ll maybe_gold = gold[node];
-            // print_vector_ll(max_gold_vec, "max_gold_vec");
             max_gold_vec[node] = max(max_gold_vec[node], max_gold_vec[u] + maybe_gold);
         }
     }
     
-    print(ts, "toposort");
-    cout << "vec: " << "toposort" << "\n";
-    for (uint i = 0; i < ts.size(); i++){
-        cout << ts[i]+1 << " ";
-    }
-    cout << "\n";
-    
-    print(max_gold_vec, "max_gold_vec");
-    
-    show_adj_table(adj);
-
-    cout << "-----------\n| VISITED |\n-----------\n";
-    for (uint i = 0; i < n; i++){
-        cout << i+1 << " | " << visited[i] << "\n";
-    }
-    cout << "-----------\n";
     cout << *max_element(max_gold_vec.begin(), max_gold_vec.end()) << "\n"; 
     return 0;
 }

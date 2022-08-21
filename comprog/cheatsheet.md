@@ -842,6 +842,373 @@ int main(){
 }
 ```
 
+# **Week 7**
+`marriage`
+> UnionFind (faster), lca (Lowest Common Ancestor)
+
+> **LCA**
+> - given a rooted, directed tree and two vertices u and v, vertex q is the LCA of u and v iff q is the lowest vertex s.t. both u and v are contained in the subtree starting at q.
+
+```cpp
+class UnionFind{
+    private:
+        vector<int> parent, rank; 
+    public:
+        UnionFind(int N) {
+            rank.assign(N,0);  // initialize
+            parent.resize(N);
+            for (int i = 0; i < N; i++) parent[i] = i;
+        }
+        void unionSet(int i, int j){
+            i = findSet(i), j = findSet(j);
+            if (!isSameSet(i, j)){  // or (i != j)
+                if (rank[i] > rank[j])
+                {
+                    parent[j] = i;
+                }
+                else 
+                {
+                    parent[i] = j;
+                    if (rank[i] == rank[j]) rank[j]++;
+                }
+            }
+        }
+        int findSet(int i){
+            if (parent[i] == i)
+            {
+                return i;
+            }
+            else
+            {
+                return parent[i] = findSet(parent[i]);  // perhaps add path compression?
+            }
+        }
+        bool isSameSet(int i, int j){
+            return findSet(i) == findSet(j);
+        }
+
+};  // Lec 7, p20, compro22 SoSe
+
+// lowest common ancestor
+void lca(int u, const vector<vector<int>> &adj, vector<int> &ancestor, UnionFind &UF, vector<bool> &visited,  vector<vector<pair<int, int>>> &queries, vector<int> &depth_field){  // lowest common ancestor
+    for (auto v: adj[u])
+    {
+        depth_field[v] = depth_field[u] + 1;
+        lca(v, adj, ancestor, UF, visited, queries, depth_field);
+        UF.unionSet(u,v);
+        ancestor[UF.findSet(u)] = u;
+    }
+    visited[u] = true;
+
+    for (auto quer : queries[u]){
+            int v = quer.first;
+            int order = quer.second;
+            // cout << "v: " << v << "order " << order << "\n";
+            if (visited[v]){
+                // cout << "LCA of " << u+1 << " and " << v+1 << " is " << ancestor[UF.findSet(v)]+1 << "\n";
+                int lca_temp = ancestor[UF.findSet(v)];
+
+                // compute distance of relatives SWWEEEEET HOOOOME AAALAABAAAAMA
+                
+                int dist = (depth_field[u] - depth_field[lca_temp]) + (depth_field[v] - depth_field[lca_temp]);
+                // cout << dist << "\n";
+                // print(depth_field, "depth_field");
+                q_answers[order] = {id2name[lca_temp], dist};  // adds the query result into a map
+            }
+    }
+}  // adapted from Lecture 7, p. 32, compro22, SoSe
+```
+
+# **Week 8**
+
+> Maximum Flow problem, Modelling as maximum flow
+> Edmonds-Karp's algorithm
+>   - BFS, picks the shortest augmenting paths. O(VE^2)
+>   - adding source: capacity 1 (per frog)
+>   - adding sink  : capacity INF
+
+> Flow:
+>   - given a network of undirected pipes, source and sink, how much
+>     water cand be pumped from s to t?
+> More formal def:
+>   - given directed G with edge capacities c_e, a source s and sink t
+>     Maximum flow  is subject to conditions like:
+>       - in every vertex except s and t, in-flow equals out-flow
+
+**Edmonds-Karp Algorithm for Maximum Flow**
+```cpp
+#include<bits/stdc++.h>
+
+using namespace std;
+#define INF numeric_limits<int>::max()
+
+vector<vector<int>> capacity;
+vector<vector<int>> adj;
+vector<int> parent;
+
+void bfs(int s) {
+    parent.assign(adj.size(), -1);
+    parent[s] = -2; // s is visited
+
+    queue<int> Q;
+    Q.push(s);
+    while (!Q.empty()) {
+        int u = Q.front(); Q.pop();
+        for (int v : adj[u]) // go u -> v
+            if (parent[v] == -1 and capacity[u][v] > 0) {
+                Q.push(v);
+                parent[v] = u;
+            }
+    }
+}
+
+int maxflow(int s, int t) {
+    int totalflow = 0;
+    int u;
+    while (true) {
+        // build bfs tree
+        bfs(s);
+        if (parent[t] == -1) // t unreachable
+            break;
+        // find bottleneck capacity
+        int bottleneck = INF;
+        u = t;
+        while (u != s) {
+            int v = parent[u];
+            bottleneck = min(bottleneck, capacity[v][u]);
+            u = v;
+        }
+        // update capacities along path
+        u = t;
+        while (u != s) {
+            int v = parent[u];
+            capacity[v][u] -= bottleneck;
+            capacity[u][v] += bottleneck;
+            u = v;
+        }
+        totalflow += bottleneck;
+    }
+    return totalflow;
+}
+
+int main() {
+    int s, t, V, E;
+    cin >> V >> E >> s >> t;
+    int u, v, c;
+    adj.resize(V);
+    capacity.assign(V, vector<int>(V, 0));
+    
+    for (int i = 0; i < E; i++) {
+        cin >> u >> v >> c;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+        capacity[u][v] += c;
+    }
+    int out = maxflow(s, t);
+    cout << out << endl;
+}
+
+```
+
+# **Week 9**
+> String Matching, LSP (Longest Suffix-Prefix) - Knuth-Morris-Pratt,
+> Also using Trie structure
+> DP for LSP in HWs down below
+
+**Knuth-Morris-Pratt**
+```cpp
+#include <bits/stdc++.h>
+#define int long long
+
+using namespace std;
+
+string s, t;
+int n, m;
+
+int32_t main() {
+    cin >> s >> t;
+    n = s.size(); m = t.size();
+
+    vector<int> lsp(m, 0);
+    for (int i = 1, prev = 0; i < m; ) {
+      if (t[i] == t[prev]) {
+        prev++;
+        lsp[i] = prev;
+        i++; 
+      } else if (prev == 0) {
+        lsp[i] = 0;
+        i++;
+      } else { prev = lsp[prev-1]; }
+    }
+
+    int start = 0, len = 0;
+    while (start + len < n) {
+        while (len >= m || s[start+len] != t[len]) {
+            if (len == 0) { start++; len = -1; break; }
+            int skip = len - lsp[len-1];
+            start += skip; len -= skip;
+        }
+        len++;
+        if (len == m)
+            cout << "t matches s at " << start << "\n";
+    }
+}
+```
+
+# **Week 10**
+> Combinatorics
+> modulo mod
+> (a + b) % p = ((a % p) + (b % p)) % p
+> (a * b) % p = ((a % p) * (b % p)) % p
+> (a - b) % p = ((a % p) - (b % p)) % p
+> fexp, factorial with modulo
+> Fermat's little theorem a^{-1} = a^{p-2} mod p, where p is the modulator
+
+```cpp
+ll fexp(ll m, ll n, ll p){
+    if (n==0) return 1;
+    else if (n%2 == 1){
+        return (m * fexp(m, n-1, p)) % p;
+    }
+    else{
+        ll r = fexp(m, n/2, p);
+        return (r * r) % p;
+    }
+}
+```
+
+```cpp
+ll factorial(ll n)
+{
+    ll res = 1, i;
+     
+    for(i = 2; i <= n; i++)
+        res = (res * i) % mod;
+         
+    return res;
+}
+```
+
+# **Week 11**
+> Hamiltonian path
+>   - Ham. path is a path that visits every vertex exactly once
+>   - NP-hard, n=20
+
+```cpp
+#include <bits/stdc++.h>
+
+/*
+ * sample input:
+4 4
+1 4
+2 3
+3 4
+2 4
+ * sample output:
+0 : 1
+1 : 1
+2 : 1
+3 : 0
+ */
+
+using namespace std;
+
+int main(){
+	int n, m;
+	cin >> n >> m;
+	set<pair<int,int>> edges;
+	for(int i = 0; i < m; i++){
+		int u, v;
+		cin >> u >> v;
+		u--, v--;
+		edges.insert({u,v}), edges.insert({v,u});
+	}
+
+	vector<vector<bool>> dp(1<<n, vector<bool>(n, false)); // subset, endnode
+
+	for(int i = 0; i < n; i++){
+		dp[1 << i][i] = true;
+	}
+
+	for(int X = 1; X < (1<<n); X++){ // all sets
+	if(__builtin_popcount(X) < 2) continue;
+
+	for(int v = 0; v < n; v++) {   // all ending vertices
+		if(!(X & (1<<v))) continue;  // v not in X
+
+		for(int u = 0; u < n; u++) {
+		if(dp[X ^ (1<<v)][u] && edges.count({u, v})){
+			dp[X][v] = true;
+		}
+		}
+	}
+	}
+	for(int i = 0; i < n; i++){
+		cout << i << " : " << dp[(1<<n)-1][i] << "\n";
+	}
+}
+```
+# Fake Exam
+## `buildstair`
+> combinatorics, product of factorials, modulo
+
+```cpp
+ll fexp(ll m, ll n, ll p){
+    if (n==0) return 1;
+    else if (n%2 == 1){
+        return (m * fexp(m, n-1, p)) % p;
+    }
+    else{
+        ll r = fexp(m, n/2, p);
+        return (r * r) % p;
+    }
+}
+
+ll factorial(ll n)
+{
+    ll res = 1, i;
+     
+    for(i = 2; i <= n; i++)
+        res = (res * i) % mod;
+         
+    return res;
+}
+
+int main(){
+    // cout << mod << "\n";
+    int n, h;
+    cin >> n;
+    map<int, int> blocks;
+    for (int i = 0; i < n; i++){
+        cin >> h;
+        if (blocks.count(h)){
+            blocks[h] += 1;
+        }
+        else{
+            blocks[h] = 1;
+        }
+
+    }
+    ll prod = 1;
+    // (a + b) mod p = ((a*mod p) + (b*mod p)) mod p
+    // (a * b) mod p = ((a*mod p) * (b*mod p)) mod p
+    // (a - b) mod p = ((a*mod p) - (b*mod p)) mod p
+    for(const auto& elem : blocks)
+    {
+        // std::cout << elem.first << " | " << elem.second << "\n";
+        prod = ((prod % mod) * (factorial(elem.second) % mod)) % mod;
+    }
+    cout << prod % mod<< "\n";
+    return 0;
+}
+```
+
+## `chase`
+> multiple usage of dijkstra's algo
+
+## `garlands`
+> one edit with lsp
+
 # Test Midterm
 ## `booster`
 > DP - Dynamic Programming
@@ -2097,7 +2464,7 @@ int main(){
     
     dijkstra(1-1, dist, adj);
     
-    // cout << "n_nodes -1: " << n_nodes-1 << "\n"; 
+    // return shortest path to Sylt
     cout << dist[n_nodes-1] << "\n";
 
     return 0;
@@ -2602,4 +2969,728 @@ int main(){
 }
 ```
 
+## W7
+### `marriage`
+```cpp
+map <int, string> id2name;
+map <string, int> name2id;
 
+class UnionFind{
+    private:
+        vector<int> parent, rank; 
+    public:
+        UnionFind(int N) {
+            rank.assign(N,0);  // initialize
+            parent.resize(N);
+            for (int i = 0; i < N; i++) parent[i] = i;
+        }
+        void unionSet(int i, int j){
+            i = findSet(i), j = findSet(j);
+            if (!isSameSet(i, j)){  // or (i != j)
+                if (rank[i] > rank[j])
+                {
+                    parent[j] = i;
+                }
+                else 
+                {
+                    parent[i] = j;
+                    if (rank[i] == rank[j]) rank[j]++;
+                }
+            }
+        }
+        int findSet(int i){
+            if (parent[i] == i)
+            {
+                return i;
+            }
+            else
+            {
+                return parent[i] = findSet(parent[i]);  // perhaps add path compression?
+            }
+        }
+        bool isSameSet(int i, int j){
+            return findSet(i) == findSet(j);
+        }
+
+};  // Lec 7, p20, compro22 SoSe
+
+// lowest common ancestor
+void lca(int u, const vector<vector<int>> &adj, vector<int> &ancestor, UnionFind &UF, vector<bool> &visited,  vector<vector<pair<int, int>>> &queries, vector<int> &depth_field){  // lowest common ancestor
+    for (auto v: adj[u])
+    {
+        depth_field[v] = depth_field[u] + 1;
+        lca(v, adj, ancestor, UF, visited, queries, depth_field);
+        UF.unionSet(u,v);
+        ancestor[UF.findSet(u)] = u;
+    }
+    visited[u] = true;
+
+    for (auto quer : queries[u]){
+            int v = quer.first;
+            int order = quer.second;
+            // cout << "v: " << v << "order " << order << "\n";
+            if (visited[v]){
+                // cout << "LCA of " << u+1 << " and " << v+1 << " is " << ancestor[UF.findSet(v)]+1 << "\n";
+                int lca_temp = ancestor[UF.findSet(v)];
+
+                // compute distance of relatives SWWEEEEET HOOOOME AAALAABAAAAMA
+                
+                int dist = (depth_field[u] - depth_field[lca_temp]) + (depth_field[v] - depth_field[lca_temp]);
+                // cout << dist << "\n";
+                // print(depth_field, "depth_field");
+                q_answers[order] = {id2name[lca_temp], dist};  // adds the query result into a map
+            }
+    }
+}  // adapted from Lecture 7, p. 32, compro22, SoSe
+
+int main(){
+    int n, q;
+    cin >> n >> q;
+    vector<string> names(n);
+    vector<int> ids(n);
+
+
+    vector<vector<int>> adj(n);
+    auto UF = UnionFind(n);
+    vector<int> ancestor(n);
+
+    // needed to solve wrong answer
+    for (int i = 0; i < n; i++) ancestor[i] = i;
+
+
+    vector<vector<pair<int, int>>> queries(n);
+    vector<bool> visited(n, false);
+    vector<int> depth_field(n,0);
+
+    // adj load
+    for (int i = 0; i < n; i++){
+        string name;
+        cin >> name;
+        names[i] = name;
+        ids[i] = i;
+        id2name[i] = name;
+        name2id[name] = i;
+    }
+
+    for (int i = 0; i < n-1; i++){
+        string name;
+        cin >> name;
+        adj[name2id[name]].push_back(i+1);
+    }
+    
+    for(int i = 0; i < q; i++){
+        string first, second;
+        cin >> first >> second;
+        queries[name2id[first]].push_back({name2id[second], i});
+
+        // put in the query from both sides, LCA may not find onesided query only
+        if (name2id[second] != name2id[first]){
+            queries[name2id[second]].push_back({name2id[first], i});
+        }  
+    }
+
+    lca(0, adj, ancestor, UF, visited, queries, depth_field);    
+      for (int i = 0; i < q; i++){
+        cout << q_answers[i].first << " " << q_answers[i].second << "\n";
+    }    
+
+    return 0;
+}
+```
+
+### `reelection`
+```cpp
+void show_weight_table(const vector<vector<pair<ll,ll>>> &adj){
+    cout << "--------------\n| ADJ. TABLE |\n--------------\n";
+    for (uint i = 0; i < adj.size(); i++){
+        cout << i+1 << " | ";
+        for (uint j = 0; j < adj[i].size(); j++){
+            cout << "(" << adj[i][j].first+1 << ", " << adj[i][j].second << " ) ";
+        }
+        cout << "\n";
+    }
+}
+
+void visit(int v, vector<bool> &visited, const vector<vector<pair<ll,ll>>> &adj,
+priority_queue<tuple<int,int,int>, vector<tuple<int,int,int>>, less<tuple<int,int,int>>> &PQ){
+    visited [v] = true;
+    for (auto p: adj[v]){
+        int u = p.first;
+        int w = p.second;
+        if (!visited[u])
+        {
+            PQ.push({w, v, u});
+        }
+    }
+}
+
+int main(){
+    int n;  // number of cities
+    int m;  // number of streets
+    cin >> n >> m;
+    ll positive_sum = 0;
+
+    vector<vector<pair<ll, ll>>> adj(n);
+    vector<vector<bool>> edge_visited(n);
+    // read the edges and save them into Adjacency List
+    for (int i = 0; i < m; i++){
+        ll first, second, weight;
+        cin >> first >> second >> weight;
+        first--; second--;
+        if (weight > 0){
+            positive_sum += weight;
+        }
+        adj[first].push_back({second, weight});
+        edge_visited[first].push_back(false);
+        if (first != second){
+            adj[second].push_back({first, weight});  // bidirectional streets
+            edge_visited[second].push_back(false);
+        }
+    }
+    // cout << "positive sum after loading: " << positive_sum << "\n";
+    
+    vector<bool> visited(n, false);
+    // <weight, from, to>
+    priority_queue<tuple<int,int,int>, vector<tuple<int,int,int>>, less<tuple<int,int,int>>> PQ;
+    visit(0, visited, adj, PQ);
+    while (!PQ.empty()) {
+        auto front = PQ.top(); PQ.pop();
+        int w, from, to;
+        tie(w, from, to) = front;
+        if (!visited[to]) {
+            // cout << "Add " << from+1 << "-" << to+1 << " to MST\n";
+            if (w < 0){
+                positive_sum += w;
+            }
+
+            visit(to, visited, adj, PQ);
+
+        }
+    }
+    
+    // output the maximum total quality
+    cout << positive_sum << "\n";
+
+    return 0;
+}
+```
+
+## W8
+### `bankrobbery`
+```cpp
+#define INF numeric_limits<int>::max()
+
+vector<vector<int>> capacity;
+vector<vector<int>> adj;
+vector<int> parent;
+
+void bfs(int s) {
+    parent.assign(adj.size(), -1);
+    parent[s] = -2; // s is visited
+
+    queue<int> Q;
+    Q.push(s);
+    while (!Q.empty()) {
+        int u = Q.front(); Q.pop();
+        for (int v : adj[u]) // go u -> v
+            if (parent[v] == -1 and capacity[u][v] > 0) {
+                Q.push(v);
+                parent[v] = u;
+            }
+    }
+}
+
+int maxflow(int s, int t) {
+    int totalflow = 0;
+    int u;
+    while (true) {
+        // build bfs tree
+        bfs(s);
+        if (parent[t] == -1) // t unreachable
+            break;
+        // find bottleneck capacity
+        int bottleneck = INF;
+        u = t;
+        while (u != s) {
+            int v = parent[u];
+            bottleneck = min(bottleneck, capacity[v][u]);
+            u = v;
+        }
+        // update capacities along path
+        u = t;
+        while (u != s) {
+            int v = parent[u];
+            capacity[v][u] -= bottleneck;
+            capacity[u][v] += bottleneck;
+            u = v;
+        }
+        totalflow += bottleneck;
+    }
+    return totalflow;
+}
+
+int main(){
+    int t;  // number of test cases
+    int l;  // amount of available policemen
+    int n;  // amount of intersections
+    int m;  // number of lines with edges
+
+    // for each test case
+    cin >> t;
+    for (int test_cases = 0; test_cases < t; test_cases++){
+        cin >> l >> n >> m;
+        // adj.assign(n, vector<int>(0, 0));  // <------------ HMMMMMM
+        adj.clear();
+        adj.resize(n);
+        capacity.assign(n, vector<int>(n, 0));
+
+        // for each edge in this test case
+        int u, v, c;
+        for (int n_edges = 0; n_edges < m; n_edges++) {
+            cin >> u >> v >> c;
+            u--; v--;
+            adj[u].push_back(v);
+            // if (count(adj[v].begin(), adj[v].end(), u) == 0){
+            adj[v].push_back(u);
+            // }
+            // show_adj_table(adj);
+            capacity[u][v] += c;
+            capacity[v][u] += c;
+        }
+        // cout << "For test case: " << test_cases << "\n";
+
+        int out = maxflow(0,n-1);
+        
+        // show_adj_table(adj);
+        // print(capacity, "capacity");
+        // cout << "out: " << out << "\n";
+        cout << "Case #" << test_cases+1 << ": ";
+        if (out <= l){
+            cout << "yes\n";
+        }
+        else cout << "no\n";
+    }
+    
+    
+    return 0;
+}
+```
+
+### `biglineup1`
+```cpp
+#define INF numeric_limits<int>::max()
+
+vector<vector<int>> capacity;
+vector<vector<int>> adj;
+vector<int> parent;
+
+void bfs(int s) {
+    parent.assign(adj.size(), -1);
+    parent[s] = -2; // s is visited
+
+    queue<int> Q;
+    Q.push(s);
+    while (!Q.empty()) {
+        int u = Q.front(); Q.pop();
+        for (int v : adj[u]) // go u -> v
+            if (parent[v] == -1 and capacity[u][v] > 0) {
+                Q.push(v);
+                parent[v] = u;
+            }
+    }
+}
+
+int maxflow(int s, int t) {
+    int totalflow = 0;
+    int u;
+    while (true) {
+        // build bfs tree
+        bfs(s);
+        if (parent[t] == -1) // t unreachable
+            break;
+        // find bottleneck capacity
+        int bottleneck = INF;
+        u = t;
+        while (u != s) {
+            int v = parent[u];
+            bottleneck = min(bottleneck, capacity[v][u]);
+            u = v;
+        }
+        // update capacities along path
+        u = t;
+        while (u != s) {
+            int v = parent[u];
+            capacity[v][u] -= bottleneck;
+            capacity[u][v] += bottleneck;
+            u = v;
+        }
+        totalflow += bottleneck;
+    }
+    return totalflow;
+}
+
+int main(){
+    int n;
+    cin >> n;
+    adj.clear();
+    adj.resize(2*n+2);
+    capacity.assign(2*n+2, vector<int>(2*n+2, 0));
+
+    int e;
+    // setup the source
+    for (int man = 1; man < n+1; man++){ // source is 0, men are from id 1
+        adj[0].push_back(man);
+        // adj[man].push_back(0);
+        capacity[0][man] += 1;
+        // capacity[man][0] += 1;
+    }
+
+    // setup the drain
+    for (int wine = n+1; wine < 2*n+1; wine++){
+        // adj[2*n+1].push_back(wine);
+        adj[wine].push_back(2*n+1);
+        capacity[wine][2*n+1] += 1;
+        // capacity[2*n+1][wine] = INF / 2;
+    }
+
+    for (int r = 1; r < n+1; r++){
+        for (int c = 0; c < n; c++){
+            cin >> e;
+            if (e == 1){
+                adj[r].push_back(c+n+1);
+                adj[c+n+1].push_back(r);
+                capacity[r][c+n+1] += 1;
+                // capacity[c+n+1][r] += 1;
+            }
+        }
+    }
+
+    // show_adj_table(adj);
+    // print(capacity, "capacity");
+    int out = maxflow(0,2*n+1);
+    cout << out << "\n";
+
+    
+    
+    return 0;
+}
+```
+
+## W9
+### `addressbook`
+```cpp
+struct trie {
+    bool isEndOfString = false;
+    int counter = 0;
+    map<char, trie*> edges;
+    void insert(string &s, int i = 0) {
+        if (i == s.length()) {
+            isEndOfString = true;
+            return;
+        }
+        if (edges.count(s[i]) == 0)
+            edges[s[i]] = new trie;
+        edges[s[i]]->counter++;
+        edges[s[i]]->insert(s, i+1);
+    }
+
+    int contains(string &s, int i = 0){
+
+        if ( i == s.length()){
+            return -1;
+        }
+        if (edges.count(s[i]) > 0){
+            if (edges[s[i]]->contains(s, i+1) == -1){
+                return edges[s[i]]->counter;
+            }            
+            else{
+                return edges[s[i]]->contains(s, i+1);
+            }
+        }
+        else return 0;
+        
+
+    }
+};
+
+trie t;
+
+int main(){
+
+    int n;
+    cin >> n;
+    string query, word;
+    for (int i = 0; i < n; i++){
+        cin >> query >> word;
+        // cout << query << " " << word << "\n";
+        if (query == "add"){
+            t.insert(word);
+        }
+        else if (query == "find"){
+            cout << t.contains(word) << "\n";
+        }
+    }
+    
+
+
+    return 0;
+}
+```
+### `lcs`
+```cpp
+void show_dp(const vector<vector<int>> &dp, string &s, string &t){
+    cout << "    e  ";
+    for (int i = 0; i < t.length(); i++){
+        cout << t[i] << "  ";
+    }
+    cout << "\n";
+
+    for (int r = 0; r <= s.length(); r++){
+        for (int c = 0; c <= t.length(); c++){
+            if (c == 0){
+                if (r==0){
+                    cout << "e | ";
+                }else{
+                    cout << s[r-1] << " | ";
+                }
+            }
+            if (dp[r][c] < 10){
+                cout << dp[r][c] << "  ";
+            }
+            else{
+                cout << dp[r][c] << " ";
+            }
+            
+        }
+        cout << "\n";
+    }
+}
+string s,t;
+int main(){
+
+    cin >> s >> t;
+
+    vector<vector<int>> dp(s.length()+1, vector<int>(t.length()+1));
+    for(int i = 0; i <= s.length(); ++i) dp[i][0] = i;  // fill the epsilon vector
+    for(int j = 0; j <= t.length(); ++j) dp[0][j] = 0;  // fill the epsilon vector
+    for(int i = 1; i <= s.length(); ++i) {
+        for (int j = 1; j <= t.length(); ++j){
+            if (s[i-1] == t[j-1])
+            {
+                // dp[i][j] = dp[i-1][j-1];
+                dp[i][j] = min({dp[i-1][j-1], 1+ dp[i-1][j], dp[i][j-1]});
+                // dp[i][j] = min({dp[i-1][j-1], dp[i][j-1]});
+            }
+            else
+            {
+                dp[i][j] = min({1+ dp[i-1][j-1], 1+ dp[i-1][j], dp[i][j-1]});
+                // dp[i][j] = 1 + min({dp[i-1][j], dp[i][j-1]});
+            }
+        }
+    }
+    cout << s.size() - dp[s.length()][t.length()] << "\n";
+    // show_dp(dp, s, t);
+    // show_adj_table(dp);
+
+    return 0;
+}
+```
+
+## W10
+### `milkman` - gcd
+```cpp
+int gcd(int a, int b){
+    int mod;
+    while ((a % b) > 0)
+    {
+        mod = a % b;
+        a = b;
+        b = mod;
+    }
+    return b;
+}
+
+class segtree {
+private:
+    vector<long long> values;
+    size_t size;
+
+    int parent(int i) {
+        return i / 2;
+    }
+    int left(int i) {
+        return 2 * i;
+    }
+    int right(int i) {
+        return 2 * i + 1;
+    }
+
+    void update(int i) {
+        // values[i] = values[left(i)] + values[right(i)];
+        values[i] = gcd(values[left(i)], values[right(i)]);
+        if (i > 1) update(parent(i));
+    }
+
+    // Query sum of interval [i, j)
+    // current_node represents the interval [l, r)
+    long long query(int i, int j, int l, int r, int current_node) {
+        if (r <= i || j <= l) return 0; // current interval and query interval don't intersect
+        if (r <= j && i <= l) return values[current_node]; // current interval contained in query interval
+
+        int m = (l + r) / 2;
+        // return query(i, j, l, m, left(current_node)) + query(i, j, m, r, right(current_node));
+        return gcd(query(i, j, l, m, left(current_node)), query(i, j, m, r, right(current_node)));
+    }
+
+public:
+    segtree(size_t n) {
+	size = 1<<(int)ceil(log2(n));
+        values.assign(2 * size, 0);
+    }
+
+    segtree(vector<long long> v): segtree(v.size()) {
+        for (size_t i = 0; i < v.size(); ++i) values[i + size] = v[i];
+        // for (size_t i = size - 1; i > 0; --i) values[i] = values[left(i)] + values[right(i)];
+        for (size_t i = size - 1; i > 0; --i) values[i] = gcd(values[left(i)], values[right(i)]);
+    }
+
+    // Query sum of interval [i, j)
+    long long query(int i, int j) {
+        return query(i, j, 0, size, 1);
+    }
+
+    // Set value at position i to val
+    void update(int i, long long val) {
+        values[i + size] = val;
+        update(parent(i + size));
+    }
+};
+
+
+
+int main(){
+    ios::sync_with_stdio(false);
+    int n, q;
+    cin >> n >> q;
+    vector<ll> v(n);
+    for (ll& l: v) cin >> l;
+
+    segtree s(v);
+    while (q--) {
+        char type;
+        cin >> type;
+
+        if (type == '!') {
+            // update
+            ll k, u;
+            cin >> k >> u;
+            s.update(k - 1, u);
+        } else {
+            // query
+            int a, b;
+            cin >> a >> b;
+            cout << s.query(a - 1, b) << endl;
+        }
+    }
+
+    return 0;
+}
+```
+
+### `pathcounter`
+```cpp
+
+const int mod = 998244353;
+
+ll factorial(ll n)
+{
+    ll res = 1, i;
+     
+    for(i = 2; i <= n; i++)
+        res = (res * i) % mod;
+         
+    return res;
+}
+
+ll fact_custom(ll c, ll r)
+{
+    ll res = (c%mod + r%mod)%mod;
+    // cout << "init: " << res << "\n";
+    for (ll i = 1; i < r; i++)
+    {
+        res = (res * (c + (r-i))) % mod;
+    }
+    return res;
+}
+
+ll fexp(ll m, ll n, ll p){
+    if (n==0) return 1;
+    else if (n%2 == 1){
+        return (m * fexp(m, n-1, p)) % p;
+    }
+    else{
+        ll r = fexp(m, n/2, p);
+        return (r * r) % p;
+    }
+}
+
+int main(){
+    int C, R;
+    cin >> C >> R;
+    // ll nom = factorial(R%mod + C%mod)%mod;
+    // ll den = factorial(R%mod)%mod * factorial(C%mod)%mod;
+
+    // cout << factorial(R+C) / (factorial(R) * factorial(C)) << "\n";
+
+    // cout << (nom * fexp(den, mod-2, mod)) % mod << "\n";
+    ll nom = fact_custom(C%mod, R%mod)%mod;
+    ll den = factorial(R%mod)%mod;
+    // cout << "nom: " << nom << " den: " << den << "\n";
+    cout << (nom * fexp(den, mod-2, mod)) % mod << "\n";
+    // cout << mod << " " << R << "\n";
+    // vector<vector<int>> dp(R+1, vector<int> (C+1, 0));  // the size can be perhaps also modulo?
+    // vector<int> dp(C+1, 1);
+
+    // cout << "Here?\n";
+
+    // dp[0][0] = 1;  // starting position, needs to be one for algo to work
+    // for (int r = 0; r < R+1; r++){
+    //     for (int c = 0; c < C+1; c++){
+    //         cout << "r: " << r << " c: " << c << "\n";
+    //         if (c == 0 && r == 0) continue;  // top left corner
+    //         else if (r == 0)  // top row 
+    //         {
+    //             dp[r][c] = dp[r][c-1] % mod;
+    //         }
+    //         else if (c == 0)
+    //         {
+    //             dp[r][c] = dp[r-1][c] % mod;
+    //         }
+    //         else
+    //         {
+    //             dp[r][c] = (dp[r-1][c] % mod) + (dp[r][c-1] % mod);
+    //         }
+    //     }
+    // }
+
+    // show_dp(dp);
+    // cout << dp[R][C] << "\n";
+    // R = R % mod;
+    // C = C % mod;
+    
+    // for (int r = 1; r < R+1; r++){  // skip the first step, done at initialization
+    //     for (int c = 0; c < C+1; c++){
+    //         if ( c == 0 ) continue;
+    //         else{
+                // dp[c] = (dp[c-1] % mod) + (dp[c] % mod);
+                // dp[c] = ((dp[c-1] % mod) + (dp[c] % mod)) % mod;  // or perhaps like this?
+    //         }
+    //     }
+    // }
+    // cout << dp[C] << "\n";
+    // ll nom = factorial(R%mod + C%mod);
+
+    // cout << "through factorial:\n" << factorial(R+C) / (factorial(R) * factorial(C)) << "\n";
+    return 0;
+}
+```

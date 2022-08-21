@@ -51,6 +51,20 @@ ll factorial(ll n)
     return res;
 }
 
+ll fact_custom(ll c, ll r)
+{
+    ll res = (c%mod + r%mod)%mod;
+    // cout << "init: " << res << "\n";
+    for (ll i = 1; i < r; i++)
+    {
+        // cout << "(" << c << " + " << r-i << ")";
+        // if (c + r-i == 0 ) cout << "| (c + r-i)% mod == 0 | is zero here i: " << i << "c: " << c << " r: " << r << "\n";
+        // if ((c + r-i)% mod == 0 ) cout << "| (c + r-i)% mod == 0 | is zero with modulo at i: " << i << "c: " << c << " r: " << r << "\n";
+        res = (res * (c + (r-i))) % mod;
+    }
+    return res;
+}
+
 ll fexp(ll m, ll n, ll p){
     if (n==0) return 1;
     else if (n%2 == 1){
@@ -65,6 +79,16 @@ ll fexp(ll m, ll n, ll p){
 int main(){
     int C, R;
     cin >> C >> R;
+    // ll nom = factorial(R%mod + C%mod)%mod;
+    // ll den = factorial(R%mod)%mod * factorial(C%mod)%mod;
+
+    // cout << factorial(R+C) / (factorial(R) * factorial(C)) << "\n";
+
+    // cout << (nom * fexp(den, mod-2, mod)) % mod << "\n";
+    ll nom = fact_custom(C%mod, R%mod)%mod;
+    ll den = factorial(R%mod)%mod;
+    // cout << "nom: " << nom << " den: " << den << "\n";
+    cout << (nom * fexp(den, mod-2, mod)) % mod << "\n";
     // cout << mod << " " << R << "\n";
     // vector<vector<int>> dp(R+1, vector<int> (C+1, 0));  // the size can be perhaps also modulo?
     // vector<int> dp(C+1, 1);
@@ -107,10 +131,7 @@ int main(){
     // }
     // cout << dp[C] << "\n";
     // ll nom = factorial(R%mod + C%mod);
-    ll nom = factorial(R%mod + C%mod)%mod;
-    ll den = factorial(R%mod)%mod * factorial(C%mod)%mod;
 
-    cout << (nom * fexp(den, mod-2, mod)) % mod << "\n";
 
 
     

@@ -69,6 +69,8 @@ void print(const vector<ll> &vec, const string &txt){
 
 //         }
 // };  // Lec 7, p17, compro22 SoSe
+map <int, string> id2name;
+map <string, int> name2id;
 
 class UnionFind{
     private:

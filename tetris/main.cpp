@@ -35,8 +35,9 @@ public:
         shape = sh;
 
     };
-    // ~Tile();
+    ~Tile(){};
 };
+
 
 
 // whats this????? vv
@@ -86,8 +87,8 @@ std::vector<std::vector<int>> place_tile(std::vector<std::vector<int>> &board, T
             return board;
         }
     }
-    board = temp_board;
-    return board;
+    // board = temp_board;
+    return temp_board;
 }
 
 
@@ -98,7 +99,7 @@ int main(){
     print_board(board);
     for (int i = 0; i < 6; i++){
         auto trace_board = original_board;
-        trace_board = place_tile(board, new_tile, cursor);
+        trace_board = place_tile(original_board, new_tile, cursor);
         print_board(trace_board);
         wait(500);
         cursor[0]++;

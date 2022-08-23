@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 #include <chrono>
 #include <thread>
+#include <random>
 typedef long long ll;
 
 void wait(int mili){
@@ -91,19 +92,50 @@ std::vector<std::vector<int>> place_tile(std::vector<std::vector<int>> &board, T
     return temp_board;
 }
 
+std::random_device rd;   // init random engine
+std::mt19937 rng(rd());  // Mersenne Twister pseudo-random generator of 32-bit number with state size of 19937 bits
+std::uniform_int_distribution<int> tile_uni(0,6);
+std::uniform_int_distribution<int> random_walk(-1,1);
+
+
 
 int main(){
-    Tile new_tile(0,1);
-    std::vector<int> cursor = {0, 4};
+    
+    
     auto board = original_board;
-    print_board(board);
-    for (int i = 0; i < 6; i++){
-        auto trace_board = original_board;
-        trace_board = place_tile(original_board, new_tile, cursor);
-        print_board(trace_board);
-        wait(500);
-        cursor[0]++;
+
+    
+    
+    
+
+    // here a while loop until the block has place to fall
+    // i)  has a place to fall, then continnue for the block to fall
+    // ii) if not possible for the block fall anymore, place it
+    //      - this means that `board = trace_board` and begin the loop again, reset cursor and choose a random tile 
+
+    bool game_on = true;
+    int rand_piece_id;
+    std::vector<int> cursor;
+    while(game_on){ // outer loop, new choice
+        cursor = {0, 4};
+        rand_piece_id = tile_uni(rng);
+
+        while(1){
+            Tile new_tile(0,rand_piece_id);
+            int movement_input = random_walk(rng);
+            // cursor // TODO add maxing and mining of cursor values so its not possible to get out of bounds
+            // possibly use a wrapper function for this that checks that the whole piece wouldnt be out of bounds
+
+        }
+
     }
+    // for (int i = 0; i < 6; i++){
+    //     auto trace_board = original_board;
+    //     trace_board = place_tile(original_board, new_tile, cursor);
+    //     print_board(trace_board);
+    //     wait(500);
+    //     cursor[0]++;
+    // }
     
 
     return 0;

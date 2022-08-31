@@ -2,6 +2,8 @@
 #include <chrono>
 #include <thread>
 #include <random>
+#include <Eigen/Dense>
+ 
 typedef long long ll;
 
 void wait(int mili){
@@ -25,33 +27,38 @@ public:
     {{0,1}, {0,2}, {1,0}, {1,1}}, // dog right
     {{0,0}, {0,1}, {1,1}, {1,2}}  // dog left
     };
+    std::vector<Eigen::MatrixXd> shapes_mat;
+    
     // default constructor
     Tile(){
         rot = 0;
         shape = -1;
+        std::vector<Eigen::MatrixXd> shapes_mat(7, Eigen::MatrixXd(2,4));
+        shapes_mat[0] << 0, 1, 2, 2, 0, 0, 0, 1; // L
+        shapes_mat[1] << 0, 0, 1, 1, 0, 1, 0, 1; // square
+        shapes_mat[2] << 0, 1, 2, 3, 0, 0, 0, 0; // long
+        shapes_mat[3] << 0, 1, 1, 1, 1, 0, 1, 2; // reversed T
+        shapes_mat[4] << 0, 1, 2, 2, 1, 1, 0, 1; // reversed L
+        shapes_mat[5] << 0, 0, 1, 1, 1, 2, 0, 1; // dog right
+        shapes_mat[6] << 0, 0, 1, 1, 0, 1, 1, 2; // dog left
     }
     // parametrized constructor
     Tile(int r, int sh){
         rot = r;
         shape = sh;
+        std::vector<Eigen::MatrixXd> shapes_mat(7, Eigen::MatrixXd(2,4));
+        shapes_mat[0] << 0, 1, 2, 2, 0, 0, 0, 1; // L
+        shapes_mat[1] << 0, 0, 1, 1, 0, 1, 0, 1; // square
+        shapes_mat[2] << 0, 1, 2, 3, 0, 0, 0, 0; // long
+        shapes_mat[3] << 0, 1, 1, 1, 1, 0, 1, 2; // reversed T
+        shapes_mat[4] << 0, 1, 2, 2, 1, 1, 0, 1; // reversed L
+        shapes_mat[5] << 0, 0, 1, 1, 1, 2, 0, 1; // dog right
+        shapes_mat[6] << 0, 0, 1, 1, 0, 1, 1, 2; // dog left
 
     };
     ~Tile(){};
 };
 
-
-
-// whats this????? vv
-
-// Tile::Tile(/* args */)
-// {
-// }
-
-// Tile::~Tile()
-// {
-// }
-
-// playing board size:
 int board_c = 10;
 int board_r = 20;
 std::vector<std::vector<int>> original_board(board_r, std::vector<int>(board_c, 0));
@@ -75,16 +82,16 @@ void print_board(std::vector<std::vector<int>> &board){
 }
 
 std::vector<std::vector<int>> place_tile(std::vector<std::vector<int>> &board, Tile &tile, std::vector<int> cursor){
-    int x, y;
+    int r, c;
     auto temp_board = board;
-    for (int i = 0; i < tile.shapes[tile.shape].size(); i++){
-        x = tile.shapes[tile.shape][i][0];
-        y = tile.shapes[tile.shape][i][1];
-        if (board[x+cursor[0]][y+cursor[1]] != 1){
-            temp_board[x+cursor[0]][y+cursor[1]] = 1;
+    for (int i = 0; i < 4; i++){
+        r = tile.shapes_mat[tile.shape](i,0);
+        c = tile.shapes_mat[tile.shape](i,1);
+        if (board[r+cursor[0]][c+cursor[1]] != 1){
+            temp_board[r+cursor[0]][c+cursor[1]] = 1;
         }
         else{
-            std::cout << "Invalid block position: " << x+cursor[0] << ", " << y+cursor[1] << " .\n";
+            std::cout << "Invalid block position: " << r+cursor[0] << ", " << c+cursor[1] << " .\n";
             return board;
         }
     }
@@ -97,57 +104,35 @@ std::mt19937 rng(rd());  // Mersenne Twister pseudo-random generator of 32-bit n
 std::uniform_int_distribution<int> tile_uni(0,6);
 std::uniform_int_distribution<int> random_walk(-1,1);
 
-std::pair<int,int> check_valid_move(Tile tile, std::pair<int,int> cursor, int rotation, std::vector<std::vector<int>> &board, bool recursive_flag){
-    /* cursor already moved */
+void do_rotation(Eigen::MatrixXd &tile_pieces, int rotation){
+    Eigen::MatrixXd rot(2,2);
+    rot << 0, -1, 1, 0;  // rot = 90 deg
+    for (int i = 0; i < rotation; i++){ // n of rotations
+        tile_pieces = rot * tile_pieces;
+    }
+}
 
-    // auto temp_board = board;
-    // auto temp_tile = tile;  // TODO check if this is a deepcopy, may cause problems if not
-    // If you hold objects by value then the default copy ctor
-    // and assignment operators will do a 'deep copy'.
-    // bcz of ^ I take tile by value, not by reference &, it might work, the calss is not large
+bool check_valid_move(Tile tile, std::pair<int,int> cursor, int rotation, std::vector<std::vector<int>> &board){
+
     tile.rot = rotation;
     std::pair<int, int> correction = {0,0};
-    // TODO do rotation here 
-    auto tile_pieces = tile.shapes[tile.shape];
-    std::pair<int, int> max_deviation = {0,0};
+    auto tile_pieces = tile.shapes_mat[tile.shape];
+    do_rotation(tile_pieces, rotation);
 
-    for (uint i = 0; i < tile_pieces.size(); i++){
-        // check if the vertical step would be correct
-        if (tile_pieces[i][0] + cursor.first - board_r > 0){
-            max_deviation.first = std::max(max_deviation.first, tile_pieces[i][0] + cursor.first - board_r);
-            // TODO if this is not correct, the function should signal that the function must be placed now or on the
-            // next move
-        }  
-        else if(board[tile_pieces[i][0] + cursor.first][tile_pieces[i][1] + cursor.second] == 1){
-            // max_deviation.first = std::max(max_deviation.first, tile_pieces[i][0]+1)
-            auto temp_cursor = cursor;
-            if (recursive_flag){
-                // TODO finish output from the `check_valid_move` to get maximal number of steps we need to move the tile in order to be valid
-                // then choose the smaller move that would satisfy the validity (horizontal vs vertical)
-                for(int j = 0; j < 4; j++){
-                    temp_cursor.first++;
-                    auto disparities = check_valid_move(tile, temp_cursor, rotation, board, false);
-                }
-
-                temp_cursor = cursor;
-                for(int j = 0; j < 4; j++){
-                    temp_cursor.second++;
-                    check_valid_move(tile, temp_cursor, rotation, board, false);
-                }
-            }
-        }
-
-        // check if the horisontal step would be correct
-        if (tile_pieces[i][1] + cursor.second - board_c > 0){ 
-                    check_valid_move(tile, temp_cursor, rotation, board, false);
-            max_deviation.second = std::max(max_deviation.second, tile_pieces[i][1] + cursor.second - board_c);
-
-        }
-
-        else if ()
-    }
-
+    // go throught tile pieces ------------------
+    for (int c = 0; c < 4; c++){
     
+        if (tile_pieces(0,c) + cursor.first - board_r > 0){  // vertical check
+        return false;
+        }        
+        else if (tile_pieces(1,c) + cursor.second - board_c > 0){ // horizontal check
+            return false;
+        }
+        else if(board[tile_pieces(0,c) + cursor.first][tile_pieces(1,c) + cursor.second] == 1){
+            return false;
+        }
+    }
+    return true;
 }
 
 
@@ -182,13 +167,9 @@ int main(){
         }
 
     }
-    // for (int i = 0; i < 6; i++){
-    //     auto trace_board = original_board;
-    //     trace_board = place_tile(original_board, new_tile, cursor);
-    //     print_board(trace_board);
-    //     wait(500);
-    //     cursor[0]++;
-    // }
+  
+
+  // TODO test do_rotation function also correct representation of all pieces in the matrix notation
     
 
     return 0;

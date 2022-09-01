@@ -3,15 +3,16 @@ CC = g++ -x c++ -std=gnu++17
 
 # compiler flags:
 #  -g     - this flag adds debugging information to the executable file
-#  -Wall  - this flag is used to turn on most compiler warnings
+#  -Wall  - this flag is used to turn on most compiler warnings 
+LINKS		 = -L/usr/lib
 DEBUG_FLAGS  = -g -Wall -Wextra -fsanitize=undefined,address -D_GLIBCXX_DEBUG -O2
 JUDGE_FLAGS  = -Wall -O2 -static -pipe
 
 # The build target 
-TARGET = eigentest
+TARGET = tetris
 
 all:
-			$(CC) $(JUDGE_FLAGS) -o $(TARGET) $(TARGET).cpp
+			$(CC) $(LINKS) $(JUDGE_FLAGS) -o $(TARGET) -lncurses $(TARGET).cpp 
 
 debug:
 			$(CC) $(DEBUG_FLAGS) -o $(TARGET) $(TARGET).cpp

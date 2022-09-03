@@ -67,7 +67,7 @@ public:
 
 int board_c = 10;
 int board_r = 20;
-std::vector<std::vector<int>> original_board(board_r, std::vector<int>(board_c, 0));
+std::vector<std::vector<int>> board(board_r, std::vector<int>(board_c, 0));
 
 std::string print_board(std::vector<std::vector<int>> &board){
     std::string to_display;
@@ -109,17 +109,17 @@ std::string print_board_alt(std::vector<std::vector<int>> &board){
     return to_display;
 }
 
-std::vector<std::vector<int>> place_tile(std::vector<std::vector<int>> &board, Tile &tile, std::vector<int> cursor){
+std::vector<std::vector<int>> place_tile(std::vector<std::vector<int>> &board, Tile &tile, std::pair<int,int> cursor){
     int r, c;
     auto temp_board = board;
     for (int i = 0; i < 4; i++){
         r = tile.shapes_mat[tile.shape](i,0);
         c = tile.shapes_mat[tile.shape](i,1);
-        if (board[r+cursor[0]][c+cursor[1]] != 1){
-            temp_board[r+cursor[0]][c+cursor[1]] = 1;
+        if (board[r+cursor.first][c+cursor.second] != 1){
+            temp_board[r+cursor.first][c+cursor.second] = 1;
         }
         else{
-            std::cout << "Invalid block position: " << r+cursor[0] << ", " << c+cursor[1] << " .\n";
+            std::cout << "Invalid block position: " << r+cursor.first << ", " << c+cursor.second << " .\n";
             return board;
         }
     }
@@ -142,8 +142,7 @@ void do_rotation(Eigen::MatrixXd &tile_pieces, int rotation){
 
 bool check_valid_move(Tile tile, std::pair<int,int> cursor, int rotation, std::vector<std::vector<int>> &board){
 
-    tile.rot = rotation;
-    std::pair<int, int> correction = {0,0};
+    // tile.rot = rotation;
     auto tile_pieces = tile.shapes_mat[tile.shape];
     do_rotation(tile_pieces, rotation);
 
@@ -153,7 +152,7 @@ bool check_valid_move(Tile tile, std::pair<int,int> cursor, int rotation, std::v
         if (tile_pieces(0,c) + cursor.first - board_r > 0){  // vertical check
         return false;
         }        
-        else if (tile_pieces(1,c) + cursor.second - board_c > 0){ // horizontal check
+        else if ((tile_pieces(1,c) + cursor.second - board_c > 0) || (tile_pieces(1,c) + cursor.second < 0)){ // horizontal check
             return false;
         }
         else if(board[tile_pieces(0,c) + cursor.first][tile_pieces(1,c) + cursor.second] == 1){
@@ -168,11 +167,11 @@ bool check_valid_move(Tile tile, std::pair<int,int> cursor, int rotation, std::v
 int main(){
     
     
-    auto board = original_board;
+    auto falling_board = board;
     bool game_on = true;
+    bool episode_on = true;
     int rand_piece_id;
     std::pair<int,int> cursor;
-    bool bKey[4];
 
     // ncurses initialization for catching the arrows
     initscr();
@@ -182,21 +181,27 @@ int main(){
     clear();
     int row, col;	
     int rot = 0;
+    int demanded_rot;
     getmaxyx(stdscr,row,col);		/* get the number of rows and columns */
     
     int ch;
     printw("[ TETRIS ]");
     printw("Press E to Exit\n");
     wait(1000);
+    std::tuple<Tile, std::pair<int,int>> episode_state;
 
 
     while(game_on){ // outer loop, new choice
 
+        
+    
         cursor = {0, 4};
         rand_piece_id = tile_uni(rng);
+        episode_on = true;
 
         // one tetris-piece episode
-        while(1){
+        while(episode_on){
+            Tile tetramino(rot, rand_piece_id);
             
             // GAME TIMING ==========================
             wait(50);
@@ -210,8 +215,10 @@ int main(){
             {
             case KEY_UP:
                 // Change rotation
-                rot++;
-                rot = rot % 4;
+                demanded_rot = rot +1;
+                demanded_rot = demanded_rot % 4;
+                // rot++;
+                // rot = rot % 4;
                 break;
             case KEY_DOWN:
                 // TODO fall faster
@@ -222,7 +229,6 @@ int main(){
                 
                 break;
             case KEY_RIGHT:
-                // printw("\nRight Arrow");
                 cursor.second++;
                 cursor.second = std::min(cursor.second, board_c-1);
                 break;
@@ -232,12 +238,40 @@ int main(){
             }
 
             // GAME LOGIC  ==========================
-
-
-            
+            // i) check cursor now
+            if (check_valid_move(tetramino, cursor, demanded_rot, board)){
+                tetramino.rot = demanded_rot;
+                episode_state = std::make_tuple(tetramino, cursor);
+            }
+            else{
+                // if this fails it must fail in the beginning -> game over?
+                clear();
+                printw("    > GAME OVER <    ");
+                wait(1000);
+                break;
+            }
+            // ii) advance the cursor
+            cursor.first++;
+            if(check_valid_move(tetramino, cursor, demanded_rot, board)){
+                tetramino.rot = demanded_rot;
+                episode_state = std::make_tuple(tetramino, cursor);
+            }
+            else{
+                episode_on = false;
+                
+            }
 
             // RENDER OUT  ==========================
-            printw(print_board(board).c_str());
+            if(episode_on){
+                //imprinting into "falling board"
+                falling_board = place_tile(board, std::get<0>(episode_state), std::get<1>(episode_state));
+                printw(print_board(falling_board).c_str());
+            }
+            else{
+                board = place_tile(board, std::get<0>(episode_state), std::get<1>(episode_state));
+                printw(print_board(board).c_str());
+            }
+            
             refresh();
             
             clear();

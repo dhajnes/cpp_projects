@@ -39,7 +39,7 @@ public:
     Tile(){
         rot = 0;
         shape = -1;
-        std::vector<Eigen::MatrixXd> shapes_mat(7, Eigen::MatrixXd(2,4));
+        shapes_mat = std::vector<Eigen::MatrixXd> (7, Eigen::MatrixXd(2,4));
         shapes_mat[0] << 0, 1, 2, 2, 0, 0, 0, 1; // L
         shapes_mat[1] << 0, 0, 1, 1, 0, 1, 0, 1; // square
         shapes_mat[2] << 0, 1, 2, 3, 0, 0, 0, 0; // long
@@ -50,9 +50,10 @@ public:
     }
     // parametrized constructor
     Tile(int r, int sh){
+        std::cerr << "[Tile-param-const] Parametrized constructor, rot: " << r << ", shape: " << sh << "\n";
         rot = r;
         shape = sh;
-        std::vector<Eigen::MatrixXd> shapes_mat(7, Eigen::MatrixXd(2,4));
+        shapes_mat = std::vector<Eigen::MatrixXd> (7, Eigen::MatrixXd(2,4));
         shapes_mat[0] << 0, 1, 2, 2, 0, 0, 0, 1; // L
         shapes_mat[1] << 0, 0, 1, 1, 0, 1, 0, 1; // square
         shapes_mat[2] << 0, 1, 2, 3, 0, 0, 0, 0; // long
@@ -60,6 +61,7 @@ public:
         shapes_mat[4] << 0, 1, 2, 2, 1, 1, 0, 1; // reversed L
         shapes_mat[5] << 0, 0, 1, 1, 1, 2, 0, 1; // dog right
         shapes_mat[6] << 0, 0, 1, 1, 0, 1, 1, 2; // dog left
+        std::cerr << "[Tile-param-const] shapes_mat[0]:\n" << shapes_mat[0] << "\n";
 
     };
     ~Tile(){};
@@ -111,10 +113,12 @@ std::string print_board_alt(std::vector<std::vector<int>> &board){
 
 std::vector<std::vector<int>> place_tile(std::vector<std::vector<int>> &board, Tile &tile, std::pair<int,int> cursor){
     int r, c;
+    std::cerr << "[place_tile] Placing tile.\n";
     auto temp_board = board;
     for (int i = 0; i < 4; i++){
         r = tile.shapes_mat[tile.shape](i,0);
         c = tile.shapes_mat[tile.shape](i,1);
+        std::cerr << "[place_tile] Obtained r: " << r << "and c: " << c << "\n";
         if (board[r+cursor.first][c+cursor.second] != 1){
             temp_board[r+cursor.first][c+cursor.second] = 1;
         }
@@ -133,6 +137,7 @@ std::uniform_int_distribution<int> tile_uni(0,6);
 std::uniform_int_distribution<int> random_walk(-1,1);
 
 void do_rotation(Eigen::MatrixXd &tile_pieces, int rotation){
+    std::cerr << "[do_rotation] Doing rotation.\n";
     Eigen::MatrixXd rot(2,2);
     rot << 0, -1, 1, 0;  // rot = 90 deg
     for (int i = 0; i < rotation; i++){ // n of rotations
@@ -143,7 +148,12 @@ void do_rotation(Eigen::MatrixXd &tile_pieces, int rotation){
 bool check_valid_move(Tile tile, std::pair<int,int> cursor, int rotation, std::vector<std::vector<int>> &board){
 
     // tile.rot = rotation;
-    auto tile_pieces = tile.shapes_mat[tile.shape];
+    std::cerr << "[check_valid_move] Checking valid move.\n";
+    // auto tile_pieces = tile.shapes_mat[tile.shape];
+    std::cerr << "[check_valid_move] tile.rot: " << tile.rot << " and tile.shape: " << tile.shape << "\n";
+    std::cerr << "[check_valid_move] tile.shapes_mat[0]: " << tile.shapes_mat[0] << "\n";
+    auto tile_pieces = tile.shapes_mat[0];
+    std::cerr << "[check_valid_move] Going for rotation.\n";
     do_rotation(tile_pieces, rotation);
 
     // go throught tile pieces ------------------
@@ -166,7 +176,6 @@ bool check_valid_move(Tile tile, std::pair<int,int> cursor, int rotation, std::v
 
 int main(){
     
-    
     auto falling_board = board;
     bool game_on = true;
     bool episode_on = true;
@@ -181,11 +190,11 @@ int main(){
     clear();
     int row, col;	
     int rot = 0;
-    int demanded_rot;
+    int demanded_rot = rot;
     getmaxyx(stdscr,row,col);		/* get the number of rows and columns */
     
     int ch;
-    printw("[ TETRIS ]");
+    printw("[ TETRIS ]\n");
     printw("Press E to Exit\n");
     wait(1000);
     std::tuple<Tile, std::pair<int,int>> episode_state;
@@ -201,20 +210,24 @@ int main(){
 
         // one tetris-piece episode
         while(episode_on){
+            falling_board = board;
+            std::cerr << "[DEBUG] rot:" << rot << " and rand_piece_id: " << rand_piece_id << "\n";
             Tile tetramino(rot, rand_piece_id);
+            std::cerr << "[DEBUG] Starting tetramino episode.\n";
             
             // GAME TIMING ==========================
             wait(50);
             timeout(1);
-
+            std::cerr << "[DEBUG] Game timing.\n";
             // GAME INPUT  ==========================
 
             ch = getch();
-            
+            wait(50);
+            std::cerr << "[DEBUG] Getting input.\n";
             switch(ch)
             {
             case KEY_UP:
-                // Change rotation
+                // Change rotationGame logic i)Game logic i)
                 demanded_rot = rot +1;
                 demanded_rot = demanded_rot % 4;
                 // rot++;
@@ -239,20 +252,23 @@ int main(){
 
             // GAME LOGIC  ==========================
             // i) check cursor now
+            
             if (check_valid_move(tetramino, cursor, demanded_rot, board)){
+                std::cerr << "[DEBUG] Game logic i).\n";
                 tetramino.rot = demanded_rot;
                 episode_state = std::make_tuple(tetramino, cursor);
             }
             else{
                 // if this fails it must fail in the beginning -> game over?
                 clear();
-                printw("    > GAME OVER <    ");
+                printw("    > GAME OVER <    \n");
                 wait(1000);
                 break;
             }
             // ii) advance the cursor
             cursor.first++;
             if(check_valid_move(tetramino, cursor, demanded_rot, board)){
+                std::cerr << "[DEBUG] Game logic ii).\n";
                 tetramino.rot = demanded_rot;
                 episode_state = std::make_tuple(tetramino, cursor);
             }
@@ -262,6 +278,7 @@ int main(){
             }
 
             // RENDER OUT  ==========================
+            std::cerr << "[DEBUG] Render out.\n";
             if(episode_on){
                 //imprinting into "falling board"
                 falling_board = place_tile(board, std::get<0>(episode_state), std::get<1>(episode_state));

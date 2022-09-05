@@ -61,7 +61,7 @@ public:
         shapes_mat[4] << 0, 1, 2, 2, 1, 1, 0, 1; // reversed L
         shapes_mat[5] << 0, 0, 1, 1, 1, 2, 0, 1; // dog right
         shapes_mat[6] << 0, 0, 1, 1, 0, 1, 1, 2; // dog left
-        std::cerr << "[Tile-param-const] shapes_mat[0]:\n" << shapes_mat[0] << "\n";
+        std::cerr << "[Tile-param-const] shapes_mat[sh]:\n" << shapes_mat[sh] << "\n";
 
     };
     ~Tile(){};
@@ -70,6 +70,15 @@ public:
 int board_c = 10;
 int board_r = 20;
 std::vector<std::vector<int>> board(board_r, std::vector<int>(board_c, 0));
+
+void do_rotation(Eigen::MatrixXd &tile_pieces, int rotation){
+    std::cerr << "[do_rotation] Doing rotation.\n";
+    Eigen::MatrixXd rot(2,2);
+    rot << 0, -1, 1, 0;  // rot = 90 deg
+    for (int i = 0; i < rotation; i++){ // n of rotations
+        tile_pieces = rot * tile_pieces;  // TODO this should be zeroed out so there are no negative numbers
+    }
+}
 
 std::string print_board(std::vector<std::vector<int>> &board){
     std::string to_display;
@@ -114,10 +123,13 @@ std::string print_board_alt(std::vector<std::vector<int>> &board){
 std::vector<std::vector<int>> place_tile(std::vector<std::vector<int>> &board, Tile &tile, std::pair<int,int> cursor){
     int r, c;
     std::cerr << "[place_tile] Placing tile.\n";
+    std::cerr << "[place_tile] Tile in question:\n" << tile.shapes_mat[tile.shape] << "\n";
+    auto tile_pieces = tile.shapes_mat[tile.shape];
+    do_rotation(tile_pieces, tile.rot);
     auto temp_board = board;
     for (int i = 0; i < 4; i++){
-        r = tile.shapes_mat[tile.shape](i,0);
-        c = tile.shapes_mat[tile.shape](i,1);
+        r = tile_pieces(0,i);
+        c = tile_pieces(1,i);
         std::cerr << "[place_tile] Obtained r: " << r << "and c: " << c << "\n";
         if (board[r+cursor.first][c+cursor.second] != 1){
             temp_board[r+cursor.first][c+cursor.second] = 1;
@@ -136,23 +148,13 @@ std::mt19937 rng(rd());  // Mersenne Twister pseudo-random generator of 32-bit n
 std::uniform_int_distribution<int> tile_uni(0,6);
 std::uniform_int_distribution<int> random_walk(-1,1);
 
-void do_rotation(Eigen::MatrixXd &tile_pieces, int rotation){
-    std::cerr << "[do_rotation] Doing rotation.\n";
-    Eigen::MatrixXd rot(2,2);
-    rot << 0, -1, 1, 0;  // rot = 90 deg
-    for (int i = 0; i < rotation; i++){ // n of rotations
-        tile_pieces = rot * tile_pieces;  // TODO this should be zeroed out so there are no negative numbers
-    }
-}
-
 bool check_valid_move(Tile tile, std::pair<int,int> cursor, int rotation, std::vector<std::vector<int>> &board){
 
     // tile.rot = rotation;
     std::cerr << "[check_valid_move] Checking valid move.\n";
-    // auto tile_pieces = tile.shapes_mat[tile.shape];
     std::cerr << "[check_valid_move] tile.rot: " << tile.rot << " and tile.shape: " << tile.shape << "\n";
-    std::cerr << "[check_valid_move] tile.shapes_mat[0]: " << tile.shapes_mat[0] << "\n";
-    auto tile_pieces = tile.shapes_mat[0];
+    std::cerr << "[check_valid_move] tile.shapes_mat[0]: \n" << tile.shapes_mat[0] << "\n";
+    auto tile_pieces = tile.shapes_mat[tile.shape];
     std::cerr << "[check_valid_move] Going for rotation.\n";
     do_rotation(tile_pieces, rotation);
 
@@ -216,7 +218,7 @@ int main(){
             std::cerr << "[DEBUG] Starting tetramino episode.\n";
             
             // GAME TIMING ==========================
-            wait(50);
+            wait(500);
             timeout(1);
             std::cerr << "[DEBUG] Game timing.\n";
             // GAME INPUT  ==========================

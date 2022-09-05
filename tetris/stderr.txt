@@ -1,27 +1,677 @@
-[DEBUG] rot:0 and rand_piece_id: 6
-[Tile-param-const] Parametrized constructor, rot: 0, shape: 6
-[Tile-param-const] shapes_mat[0]:
+[DEBUG] rot:0 and rand_piece_id: 0
+[Tile-param-const] Parametrized constructor, rot: 0, shape: 0
+[Tile-param-const] shapes_mat[sh]:
 0 1 2 2
 0 0 0 1
 [DEBUG] Starting tetramino episode.
 [DEBUG] Game timing.
 [DEBUG] Getting input.
 [check_valid_move] Checking valid move.
-[check_valid_move] tile.rot: 0 and tile.shape: 6
-[check_valid_move] tile.shapes_mat[0]: 0 1 2 2
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
 0 0 0 1
 [check_valid_move] Going for rotation.
 [do_rotation] Doing rotation.
 [DEBUG] Game logic i).
 [check_valid_move] Checking valid move.
-[check_valid_move] tile.rot: 0 and tile.shape: 6
-[check_valid_move] tile.shapes_mat[0]: 0 1 2 2
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
 0 0 0 1
 [check_valid_move] Going for rotation.
 [do_rotation] Doing rotation.
 [DEBUG] Game logic ii).
 [DEBUG] Render out.
 [place_tile] Placing tile.
+[place_tile] Tile in question:
+0 1 2 2
+0 0 0 1
+[do_rotation] Doing rotation.
+[place_tile] Obtained r: 0and c: 0
+[place_tile] Obtained r: 1and c: 0
+[place_tile] Obtained r: 2and c: 0
+[place_tile] Obtained r: 2and c: 1
+[DEBUG] rot:0 and rand_piece_id: 0
+[Tile-param-const] Parametrized constructor, rot: 0, shape: 0
+[Tile-param-const] shapes_mat[sh]:
+0 1 2 2
+0 0 0 1
+[DEBUG] Starting tetramino episode.
+[DEBUG] Game timing.
+[DEBUG] Getting input.
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic i).
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic ii).
+[DEBUG] Render out.
+[place_tile] Placing tile.
+[place_tile] Tile in question:
+0 1 2 2
+0 0 0 1
+[do_rotation] Doing rotation.
+[place_tile] Obtained r: 0and c: 0
+[place_tile] Obtained r: 1and c: 0
+[place_tile] Obtained r: 2and c: 0
+[place_tile] Obtained r: 2and c: 1
+[DEBUG] rot:0 and rand_piece_id: 0
+[Tile-param-const] Parametrized constructor, rot: 0, shape: 0
+[Tile-param-const] shapes_mat[sh]:
+0 1 2 2
+0 0 0 1
+[DEBUG] Starting tetramino episode.
+[DEBUG] Game timing.
+[DEBUG] Getting input.
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic i).
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic ii).
+[DEBUG] Render out.
+[place_tile] Placing tile.
+[place_tile] Tile in question:
+0 1 2 2
+0 0 0 1
+[do_rotation] Doing rotation.
+[place_tile] Obtained r: 0and c: 0
+[place_tile] Obtained r: 1and c: 0
+[place_tile] Obtained r: 2and c: 0
+[place_tile] Obtained r: 2and c: 1
+[DEBUG] rot:0 and rand_piece_id: 0
+[Tile-param-const] Parametrized constructor, rot: 0, shape: 0
+[Tile-param-const] shapes_mat[sh]:
+0 1 2 2
+0 0 0 1
+[DEBUG] Starting tetramino episode.
+[DEBUG] Game timing.
+[DEBUG] Getting input.
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic i).
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic ii).
+[DEBUG] Render out.
+[place_tile] Placing tile.
+[place_tile] Tile in question:
+0 1 2 2
+0 0 0 1
+[do_rotation] Doing rotation.
+[place_tile] Obtained r: 0and c: 0
+[place_tile] Obtained r: 1and c: 0
+[place_tile] Obtained r: 2and c: 0
+[place_tile] Obtained r: 2and c: 1
+[DEBUG] rot:0 and rand_piece_id: 0
+[Tile-param-const] Parametrized constructor, rot: 0, shape: 0
+[Tile-param-const] shapes_mat[sh]:
+0 1 2 2
+0 0 0 1
+[DEBUG] Starting tetramino episode.
+[DEBUG] Game timing.
+[DEBUG] Getting input.
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic i).
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic ii).
+[DEBUG] Render out.
+[place_tile] Placing tile.
+[place_tile] Tile in question:
+0 1 2 2
+0 0 0 1
+[do_rotation] Doing rotation.
+[place_tile] Obtained r: 0and c: 0
+[place_tile] Obtained r: 1and c: 0
+[place_tile] Obtained r: 2and c: 0
+[place_tile] Obtained r: 2and c: 1
+[DEBUG] rot:0 and rand_piece_id: 0
+[Tile-param-const] Parametrized constructor, rot: 0, shape: 0
+[Tile-param-const] shapes_mat[sh]:
+0 1 2 2
+0 0 0 1
+[DEBUG] Starting tetramino episode.
+[DEBUG] Game timing.
+[DEBUG] Getting input.
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic i).
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 1 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic ii).
+[DEBUG] Render out.
+[place_tile] Placing tile.
+[place_tile] Tile in question:
+0 1 2 2
+0 0 0 1
+[do_rotation] Doing rotation.
 [place_tile] Obtained r: 0and c: 0
 [place_tile] Obtained r: 0and c: 1
-tetris: /usr/local/include/Eigen/src/Core/DenseCoeffsBase.h:367: Eigen::DenseCoeffsBase<Derived, 1>::Scalar& Eigen::DenseCoeffsBase<Derived, 1>::operator()(Eigen::Index, Eigen::Index) [with Derived = Eigen::Matrix<double, -1, -1>; Eigen::DenseCoeffsBase<Derived, 1>::Scalar = double; Eigen::Index = long int]: Assertion `row >= 0 && row < rows() && col >= 0 && col < cols()' failed.
+[place_tile] Obtained r: 0and c: 2
+[place_tile] Obtained r: -1and c: 2
+[DEBUG] rot:0 and rand_piece_id: 0
+[Tile-param-const] Parametrized constructor, rot: 0, shape: 0
+[Tile-param-const] shapes_mat[sh]:
+0 1 2 2
+0 0 0 1
+[DEBUG] Starting tetramino episode.
+[DEBUG] Game timing.
+[DEBUG] Getting input.
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic i).
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 1 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic ii).
+[DEBUG] Render out.
+[place_tile] Placing tile.
+[place_tile] Tile in question:
+0 1 2 2
+0 0 0 1
+[do_rotation] Doing rotation.
+[place_tile] Obtained r: 0and c: 0
+[place_tile] Obtained r: 0and c: 1
+[place_tile] Obtained r: 0and c: 2
+[place_tile] Obtained r: -1and c: 2
+[DEBUG] rot:0 and rand_piece_id: 0
+[Tile-param-const] Parametrized constructor, rot: 0, shape: 0
+[Tile-param-const] shapes_mat[sh]:
+0 1 2 2
+0 0 0 1
+[DEBUG] Starting tetramino episode.
+[DEBUG] Game timing.
+[DEBUG] Getting input.
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic i).
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 1 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic ii).
+[DEBUG] Render out.
+[place_tile] Placing tile.
+[place_tile] Tile in question:
+0 1 2 2
+0 0 0 1
+[do_rotation] Doing rotation.
+[place_tile] Obtained r: 0and c: 0
+[place_tile] Obtained r: 0and c: 1
+[place_tile] Obtained r: 0and c: 2
+[place_tile] Obtained r: -1and c: 2
+[DEBUG] rot:0 and rand_piece_id: 0
+[Tile-param-const] Parametrized constructor, rot: 0, shape: 0
+[Tile-param-const] shapes_mat[sh]:
+0 1 2 2
+0 0 0 1
+[DEBUG] Starting tetramino episode.
+[DEBUG] Game timing.
+[DEBUG] Getting input.
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic i).
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 1 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic ii).
+[DEBUG] Render out.
+[place_tile] Placing tile.
+[place_tile] Tile in question:
+0 1 2 2
+0 0 0 1
+[do_rotation] Doing rotation.
+[place_tile] Obtained r: 0and c: 0
+[place_tile] Obtained r: 0and c: 1
+[place_tile] Obtained r: 0and c: 2
+[place_tile] Obtained r: -1and c: 2
+[DEBUG] rot:0 and rand_piece_id: 0
+[Tile-param-const] Parametrized constructor, rot: 0, shape: 0
+[Tile-param-const] shapes_mat[sh]:
+0 1 2 2
+0 0 0 1
+[DEBUG] Starting tetramino episode.
+[DEBUG] Game timing.
+[DEBUG] Getting input.
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic i).
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 1 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic ii).
+[DEBUG] Render out.
+[place_tile] Placing tile.
+[place_tile] Tile in question:
+0 1 2 2
+0 0 0 1
+[do_rotation] Doing rotation.
+[place_tile] Obtained r: 0and c: 0
+[place_tile] Obtained r: 0and c: 1
+[place_tile] Obtained r: 0and c: 2
+[place_tile] Obtained r: -1and c: 2
+[DEBUG] rot:0 and rand_piece_id: 0
+[Tile-param-const] Parametrized constructor, rot: 0, shape: 0
+[Tile-param-const] shapes_mat[sh]:
+0 1 2 2
+0 0 0 1
+[DEBUG] Starting tetramino episode.
+[DEBUG] Game timing.
+[DEBUG] Getting input.
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic i).
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 1 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic ii).
+[DEBUG] Render out.
+[place_tile] Placing tile.
+[place_tile] Tile in question:
+0 1 2 2
+0 0 0 1
+[do_rotation] Doing rotation.
+[place_tile] Obtained r: 0and c: 0
+[place_tile] Obtained r: 0and c: 1
+[place_tile] Obtained r: 0and c: 2
+[place_tile] Obtained r: -1and c: 2
+[DEBUG] rot:0 and rand_piece_id: 0
+[Tile-param-const] Parametrized constructor, rot: 0, shape: 0
+[Tile-param-const] shapes_mat[sh]:
+0 1 2 2
+0 0 0 1
+[DEBUG] Starting tetramino episode.
+[DEBUG] Game timing.
+[DEBUG] Getting input.
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic i).
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 1 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic ii).
+[DEBUG] Render out.
+[place_tile] Placing tile.
+[place_tile] Tile in question:
+0 1 2 2
+0 0 0 1
+[do_rotation] Doing rotation.
+[place_tile] Obtained r: 0and c: 0
+[place_tile] Obtained r: 0and c: 1
+[place_tile] Obtained r: 0and c: 2
+[place_tile] Obtained r: -1and c: 2
+[DEBUG] rot:0 and rand_piece_id: 0
+[Tile-param-const] Parametrized constructor, rot: 0, shape: 0
+[Tile-param-const] shapes_mat[sh]:
+0 1 2 2
+0 0 0 1
+[DEBUG] Starting tetramino episode.
+[DEBUG] Game timing.
+[DEBUG] Getting input.
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic i).
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 1 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic ii).
+[DEBUG] Render out.
+[place_tile] Placing tile.
+[place_tile] Tile in question:
+0 1 2 2
+0 0 0 1
+[do_rotation] Doing rotation.
+[place_tile] Obtained r: 0and c: 0
+[place_tile] Obtained r: 0and c: 1
+[place_tile] Obtained r: 0and c: 2
+[place_tile] Obtained r: -1and c: 2
+[DEBUG] rot:0 and rand_piece_id: 0
+[Tile-param-const] Parametrized constructor, rot: 0, shape: 0
+[Tile-param-const] shapes_mat[sh]:
+0 1 2 2
+0 0 0 1
+[DEBUG] Starting tetramino episode.
+[DEBUG] Game timing.
+[DEBUG] Getting input.
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic i).
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 1 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic ii).
+[DEBUG] Render out.
+[place_tile] Placing tile.
+[place_tile] Tile in question:
+0 1 2 2
+0 0 0 1
+[do_rotation] Doing rotation.
+[place_tile] Obtained r: 0and c: 0
+[place_tile] Obtained r: 0and c: 1
+[place_tile] Obtained r: 0and c: 2
+[place_tile] Obtained r: -1and c: 2
+[DEBUG] rot:0 and rand_piece_id: 0
+[Tile-param-const] Parametrized constructor, rot: 0, shape: 0
+[Tile-param-const] shapes_mat[sh]:
+0 1 2 2
+0 0 0 1
+[DEBUG] Starting tetramino episode.
+[DEBUG] Game timing.
+[DEBUG] Getting input.
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic i).
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 1 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic ii).
+[DEBUG] Render out.
+[place_tile] Placing tile.
+[place_tile] Tile in question:
+0 1 2 2
+0 0 0 1
+[do_rotation] Doing rotation.
+[place_tile] Obtained r: 0and c: 0
+[place_tile] Obtained r: 0and c: 1
+[place_tile] Obtained r: 0and c: 2
+[place_tile] Obtained r: -1and c: 2
+[DEBUG] rot:0 and rand_piece_id: 0
+[Tile-param-const] Parametrized constructor, rot: 0, shape: 0
+[Tile-param-const] shapes_mat[sh]:
+0 1 2 2
+0 0 0 1
+[DEBUG] Starting tetramino episode.
+[DEBUG] Game timing.
+[DEBUG] Getting input.
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic i).
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 1 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic ii).
+[DEBUG] Render out.
+[place_tile] Placing tile.
+[place_tile] Tile in question:
+0 1 2 2
+0 0 0 1
+[do_rotation] Doing rotation.
+[place_tile] Obtained r: 0and c: 0
+[place_tile] Obtained r: 0and c: 1
+[place_tile] Obtained r: 0and c: 2
+[place_tile] Obtained r: -1and c: 2
+[DEBUG] rot:0 and rand_piece_id: 0
+[Tile-param-const] Parametrized constructor, rot: 0, shape: 0
+[Tile-param-const] shapes_mat[sh]:
+0 1 2 2
+0 0 0 1
+[DEBUG] Starting tetramino episode.
+[DEBUG] Game timing.
+[DEBUG] Getting input.
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic i).
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 1 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic ii).
+[DEBUG] Render out.
+[place_tile] Placing tile.
+[place_tile] Tile in question:
+0 1 2 2
+0 0 0 1
+[do_rotation] Doing rotation.
+[place_tile] Obtained r: 0and c: 0
+[place_tile] Obtained r: 0and c: 1
+[place_tile] Obtained r: 0and c: 2
+[place_tile] Obtained r: -1and c: 2
+[DEBUG] rot:0 and rand_piece_id: 0
+[Tile-param-const] Parametrized constructor, rot: 0, shape: 0
+[Tile-param-const] shapes_mat[sh]:
+0 1 2 2
+0 0 0 1
+[DEBUG] Starting tetramino episode.
+[DEBUG] Game timing.
+[DEBUG] Getting input.
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic i).
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 1 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic ii).
+[DEBUG] Render out.
+[place_tile] Placing tile.
+[place_tile] Tile in question:
+0 1 2 2
+0 0 0 1
+[do_rotation] Doing rotation.
+[place_tile] Obtained r: 0and c: 0
+[place_tile] Obtained r: 0and c: 1
+[place_tile] Obtained r: 0and c: 2
+[place_tile] Obtained r: -1and c: 2
+[DEBUG] rot:0 and rand_piece_id: 0
+[Tile-param-const] Parametrized constructor, rot: 0, shape: 0
+[Tile-param-const] shapes_mat[sh]:
+0 1 2 2
+0 0 0 1
+[DEBUG] Starting tetramino episode.
+[DEBUG] Game timing.
+[DEBUG] Getting input.
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic i).
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 1 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic ii).
+[DEBUG] Render out.
+[place_tile] Placing tile.
+[place_tile] Tile in question:
+0 1 2 2
+0 0 0 1
+[do_rotation] Doing rotation.
+[place_tile] Obtained r: 0and c: 0
+[place_tile] Obtained r: 0and c: 1
+[place_tile] Obtained r: 0and c: 2
+[place_tile] Obtained r: -1and c: 2
+[DEBUG] rot:0 and rand_piece_id: 0
+[Tile-param-const] Parametrized constructor, rot: 0, shape: 0
+[Tile-param-const] shapes_mat[sh]:
+0 1 2 2
+0 0 0 1
+[DEBUG] Starting tetramino episode.
+[DEBUG] Game timing.
+[DEBUG] Getting input.
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 0 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+[DEBUG] Game logic i).
+[check_valid_move] Checking valid move.
+[check_valid_move] tile.rot: 1 and tile.shape: 0
+[check_valid_move] tile.shapes_mat[0]: 
+0 1 2 2
+0 0 0 1
+[check_valid_move] Going for rotation.
+[do_rotation] Doing rotation.
+/usr/include/c++/7/debug/vector:417:
+Error: attempt to subscript container with out-of-bounds index 20, but 
+container only holds 20 elements.
+
+Objects involved in the operation:
+    sequence "this" @ 0x0x5604b5960f00 {
+      type = std::__debug::vector<std::__debug::vector<int, std::allocator<int> >, std::allocator<std::__debug::vector<int, std::allocator<int> > > >;
+    }
